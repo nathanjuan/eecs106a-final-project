@@ -1,0 +1,13 @@
+frames:
+  - name: 'link_1'
+    spheres:
+      - pos: [0, 0.75, 0.75]
+        radius: 0.5
+      - pos: [0.6, 0.3, 0.5]
+        radius: 0.1
+      - pos: [0.4, 0.4, 0.65]
+        radius: 0.1
+      - pos: [0.4, 0.4, 0.3]
+        radius: 0.1
+     # - pos: [0, 0, 0.8]
+      #  radius: 0.1

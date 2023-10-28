@@ -1,0 +1,36 @@
+<!--
+Choose a proper node to reboot the gripper of an UR from the robot code.
+Since this uses eval in if, it works with Kinetic+.
+-->
+<launch>
+
+  <arg name="robot_code" default="" />
+  <arg name="dxldev" default="/dev/ttyUSB0" />
+
+  <group if="$(eval robot_code in ('UR3DxlG','UR3eDxlG','UR3e125hzDxlG') )">
+    <node pkg="ay_util" type="dxlg_reboot.py" name="gripper_rebooter" output="screen"
+          args="$(arg dxldev) DxlGripper" />
+  </group>
+
+  <group if="$(eval robot_code in ('UR3ThG','UR3eThG','UR3e125hzThG','UR5eThG','Gen3ThG') )">
+    <node pkg="ay_util" type="dxlg_reboot.py" name="gripper_rebooter" output="screen"
+          args="$(arg dxldev) RHP12RNGripper" />
+  </group>
+
+  <group if="$(eval robot_code in ('UR3DxlpO2_Straight1','UR3DxlpO2_SRound1','UR3DxlpO2_Fork1', 'UR3eDxlpO2_Straight1','UR3eDxlpO2_SRound1','UR3eDxlpO2_Fork1', 'UR3e125hzDxlpO2_Straight1','UR3e125hzDxlpO2_SRound1','UR3e125hzDxlpO2_Fork1') )">
+    <arg name="finger_type" value="$(eval robot_code.split('_')[1] )" />
+    <node pkg="ay_util" type="dxlg_reboot.py" name="gripper_rebooter" output="screen"
+          args="$(arg dxldev) DxlpO2Gripper $(arg finger_type)" />
+  </group>
+
+  <group if="$(eval robot_code in ('UR3DxlpY1','UR3eDxlpY1','UR3e125hzDxlpY1','UR5eDxlpY1') )">
+    <node pkg="ay_util" type="dxlg_reboot.py" name="gripper_rebooter" output="screen"
+          args="$(arg dxldev) DxlpY1Gripper" />
+  </group>
+
+  <group if="$(eval robot_code in ('Gen3DxlO3',) )">
+    <node pkg="ay_util" type="dxlg_reboot.py" name="gripper_rebooter" output="screen"
+          args="$(arg dxldev) DxlO3Gripper" />
+  </group>
+
+</launch>

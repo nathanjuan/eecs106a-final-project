@@ -1,0 +1,10 @@
+# Control goal.
+trajectory_msgs/JointTrajectory trajectory
+---
+# Control result.
+int32 result
+int32 SUCCESS = 0
+int32 FAILURE = -1
+---
+# Control feedback.
+sensor_msgs/JointState config

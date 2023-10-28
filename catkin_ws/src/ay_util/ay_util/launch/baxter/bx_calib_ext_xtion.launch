@@ -1,0 +1,24 @@
+<launch>
+  <!---
+    Baxter> c t.x_sensor
+    [1.1229115529115921, -0.038539283504234308, 0.25381091552396839, 0.69298199265695459, 0.60546364515971962, -0.24943882980488652, -0.30161233799145315]
+    Baxter> c t.l_x_m_wrist
+    [-0.09275914373791515, 0.01936969482185448, -0.02817289919563251, -0.012361563978296205, -0.699832597493957, 0.003426819967215844, 0.7141916998438052]
+    Baxter> e Xold=copy.deepcopy(Vec(t.x_sensor))
+    Baxter> e t.x_sensor=[]
+    DO MANUAL CALIBRATION (FOLLOWING)
+    Baxter> e Xnew=Vec([1.1005, -0.0613, 0.3273, 0.7134, 0.6078, -0.231, -0.2612])
+    Baxter> e XL=t.robot.FK(arm=LEFT)
+    Baxter> c TransformLeftInv(XL,Transform(TransformRightInv(Xnew,Xold),Transform(XL,t.l_x_m_wrist)))
+    [-0.11322564178071542, -0.010057081473028905, -0.021574521914261884, -0.015233699298053838, -0.73131828110728447, -0.015020503701328262, 0.68170073389467734]
+    (USE THIS RESULT AS A NEW MARKER LOCAL POSE)
+  -->
+
+  <!-- Manual calibration of a thing -->
+  <node pkg="tf_keyboard_cal" type="tf_interactive_marker.py"
+        name="bx_calib_ext_xtion" output="screen"
+        args="torso camera_rgb_optical_frame
+          1.1005 -0.0613 0.3273 0.7134 0.6078 -0.231 -0.2612
+          " />
+
+</launch>

@@ -1,0 +1,29 @@
+<package>
+  <name>ay_util_msgs</name>
+  <version>1.0.0</version>
+  <description>ay_util_msgs</description>
+  <maintainer email="info@akihikoy.net">Akihiko Yamaguchi</maintainer>
+
+  <license>Described in LICENSE</license>
+
+  <url type="website">http://akihikoy.net</url>
+  <!-- <url type="bugtracker"></url> -->
+
+  <author>Akihiko Yamaguchi</author>
+
+  <!-- Dependencies which this package needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Dependencies needed to compile this package. -->
+  <build_depend>std_msgs</build_depend>
+  <build_depend>moveit_msgs</build_depend>
+
+  <!-- Dependencies needed after this package is compiled. -->
+  <run_depend>std_msgs</run_depend>
+  <run_depend>moveit_msgs</run_depend>
+
+  <!-- Dependencies needed only for running tests. -->
+  <!-- <test_depend>std_msgs</test_depend> -->
+  <!-- <test_depend>moveit_msgs</test_depend> -->
+
+</package>

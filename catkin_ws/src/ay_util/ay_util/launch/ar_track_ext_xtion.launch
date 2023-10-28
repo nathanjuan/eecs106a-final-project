@@ -1,0 +1,27 @@
+<launch>
+  <include file="$(find openni2_launch)/launch/openni2.launch"/>
+  <!--rosrun dynamic_reconfigure dynparam set /camera/driver data_skip 30
+    Change 30 to 0 for max speed -->
+  <node name="slowdown_xtion" pkg="dynamic_reconfigure" type="dynparam"
+        respawn="false" output="screen" args="set /camera/driver data_skip 30" />
+  <!--Turn off auto_exposure-->
+  <node name="offae_xtion" pkg="dynamic_reconfigure" type="dynparam"
+        respawn="false" output="screen" args="set /camera/driver auto_exposure false" />
+
+  <arg name="marker_size" default="4.8" />
+  <!--<arg name="max_new_marker_error" default="0.08" />-->
+  <arg name="max_new_marker_error" default="0.12" />
+  <!--<arg name="max_track_error" default="0.2" />-->
+  <arg name="max_track_error" default="0.4" />
+
+  <!--<arg name="cam_image_topic" default="/kinect_head/depth_registered/points" />-->
+  <!--<arg name="cam_info_topic" default="/kinect_head/rgb/camera_info" />    -->
+  <arg name="cam_image_topic" default="/camera/depth/points_xyzrgb" />
+  <arg name="cam_info_topic" default="/camera/depth/camera_info" />
+
+  <!--<arg name="output_frame" default="/torso_lift_link" />-->
+  <arg name="output_frame" default="/camera_rgb_optical_frame" />
+  <!--<arg name="med_filt_size" default="5" />-->
+
+  <node name="ar_track_alvar" pkg="ar_track_alvar" type="individualMarkers" respawn="false" output="screen" args="$(arg marker_size) $(arg max_new_marker_error) $(arg max_track_error) $(arg cam_image_topic) $(arg cam_info_topic) $(arg output_frame)" />
+</launch>

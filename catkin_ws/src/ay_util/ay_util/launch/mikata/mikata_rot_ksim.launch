@@ -1,0 +1,18 @@
+<!--
+Setup kinematics simulation of Mikata Arm (gripper is rotated).
+-->
+
+<launch>
+
+  <arg name="jsdev" default="/dev/input/js0" />
+  <include file="$(find ay_util)/launch/mikata/mikata_rot_cmn.launch">
+    <arg name="jsdev"  value="$(arg jsdev)" />
+  </include>
+
+  <node pkg="ay_util" type="dummy_robot.py"
+        name="mikata_dummy" output="screen"
+        args="100" />
+
+  <node pkg="rviz" type="rviz" name="rviz"/>
+
+</launch>

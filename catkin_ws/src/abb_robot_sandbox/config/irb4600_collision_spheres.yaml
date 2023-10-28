@@ -1,0 +1,163 @@
+frames:
+  - name: 'base_link'
+    spheres:
+      - pos: [ -0.32, 0.1, 0.1 ]
+        radius: 0.11
+      - pos: [ -0.32, 0, 0.1 ]
+        radius: 0.11
+      - pos: [ -0.32, -0.1, 0.1 ]
+        radius: 0.11
+      - pos: [ -0.15, 0.14, 0.09 ]
+        radius: 0.15
+      - pos: [ -0.15, -0.14, 0.09 ]
+        radius: 0.15
+      - pos: [ -0.05, 0.14, 0.09 ]
+        radius: 0.15
+      - pos: [ -0.05, -0.14, 0.09 ]
+        radius: 0.15
+      - pos: [ 0.05, 0.1, 0.09 ]
+        radius: 0.15
+      - pos: [ 0.05, -0.1, 0.09 ]
+        radius: 0.15
+      - pos: [ 0.15, 0, 0.09 ]
+        radius: 0.15
+  - name: 'link_1'
+    spheres:
+      - pos: [ 0.2, 0.05, 0 ]
+        radius: 0.15
+      - pos: [ 0.2, 0, -0.2 ]
+        radius: 0.1
+      - pos: [ 0.2, 0.25, 0 ]
+        radius: 0.15
+      - pos: [ 0, 0.05, 0 ]
+        radius: 0.15
+      - pos: [ 0, 0.05, -0.2 ]
+        radius: 0.15
+      - pos: [ 0, -0.05, -0.2 ]
+        radius: 0.15
+      - pos: [ -0.16, 0, 0 ]
+        radius: 0.1
+      - pos: [ -0.16, 0, -0.1 ]
+        radius: 0.1
+      - pos: [ -0.16, 0, -0.2 ]
+        radius: 0.1
+  - name: 'link_2'
+    spheres:
+      - pos: [ 0, -0.12, 0 ]
+        radius: 0.15
+      - pos: [ 0, -0.17, 0.2 ]
+        radius: 0.2
+      - pos: [ 0, -0.17, 0.4 ]
+        radius: 0.2
+      - pos: [ 0, -0.17, 0.6 ]
+        radius: 0.2
+      - pos: [ 0, -0.17, 0.8 ]
+        radius: 0.2
+      - pos: [ 0, -0.17, 1.0 ]
+        radius: 0.2
+  - name: 'link_3'
+    spheres:
+      - pos: [ 0, 0, 0 ]
+        radius: 0.175
+      - pos: [ 0, 0.1, 0 ]
+        radius: 0.175
+      - pos: [ 0, 0.15, 0 ]
+        radius: 0.175
+      - pos: [ -0.05, 0, 0.2 ]
+        radius: 0.175
+      - pos: [ -0.05, 0.1, 0.2 ]
+        radius: 0.175
+      - pos: [ 0.15, 0, 0.2 ]
+        radius: 0.175
+      - pos: [ 0.15, 0.1, 0.2 ]
+        radius: 0.175
+      - pos: [ 0.2, 0.02, 0.2 ]
+        radius: 0.175
+  - name: 'link_4'
+    spheres:
+      - pos: [ 0.35, 0, 0 ]
+        radius: 0.09
+      - pos: [ 0.45, 0, 0 ]
+        radius: 0.07
+      - pos: [ 0.5, 0, 0 ]
+        radius: 0.065
+      - pos: [ 0.55, 0, 0 ]
+        radius: 0.065
+      - pos: [ 0.6, 0, 0 ]
+        radius: 0.06
+      - pos: [ 0.65, 0, 0 ]
+        radius: 0.06
+      - pos: [ 0.7, 0, 0 ]
+        radius: 0.06
+      - pos: [ 0.75, 0, 0.03 ]
+        radius: 0.05
+      - pos: [ 0.75, 0, -0.03 ]
+        radius: 0.05
+      - pos: [ 0.8, 0, 0 ]
+        radius: 0.06
+      # Bottom Side Spheres
+      - pos: [ 0.77, 0.08, -0.03 ]
+        radius: 0.05
+      - pos: [ 0.77, -0.08, -0.03 ]
+        radius: 0.05
+      - pos: [ 0.83, 0.08, -0.03 ]
+        radius: 0.05
+      - pos: [ 0.83, -0.08, -0.03 ]
+        radius: 0.05
+      - pos: [ 0.89, 0.08, -0.035 ]
+        radius: 0.05
+      - pos: [ 0.89, -0.08, -0.035 ]
+        radius: 0.05
+      - pos: [ 0.95, 0.08, -0.05 ]
+        radius: 0.05
+      - pos: [ 0.95, -0.08, -0.05 ]
+        radius: 0.05
+      - pos: [ 1.01, 0.08, -0.045 ]
+        radius: 0.05
+      - pos: [ 1.01, -0.08, -0.045 ]
+        radius: 0.05
+      # Top Side Spheres
+      - pos: [ 0.77, 0.08, 0.03 ]
+        radius: 0.05
+      - pos: [ 0.77, -0.08, 0.03 ]
+        radius: 0.05
+      - pos: [ 0.83, 0.08, 0.03 ]
+        radius: 0.05
+      - pos: [ 0.83, -0.08, 0.03 ]
+        radius: 0.05
+      - pos: [ 0.89, 0.08, 0.035 ]
+        radius: 0.05
+      - pos: [ 0.89, -0.08, 0.035 ]
+        radius: 0.05
+      - pos: [ 0.95, 0.08, 0.05 ]
+        radius: 0.05
+      - pos: [ 0.95, -0.08, 0.05 ]
+        radius: 0.05
+      - pos: [ 1.01, 0.08, 0.045 ]
+        radius: 0.05
+      - pos: [ 1.01, -0.08, 0.045 ]
+        radius: 0.05
+  - name: 'link_5'
+    spheres:
+      - pos: [ 0, 0, 0 ]
+        radius: 0.075
+  - name: 'link_6'
+    spheres:
+      - pos: [ -0.03, 0, 0 ]
+        radius: 0.05
+      - pos: [ -0.01, 0.05, 0 ]
+        radius: 0.02
+      - pos: [ -0.01, -0.05, 0 ]
+        radius: 0.02
+      - pos: [ -0.01, 0, -0.05 ]
+        radius: 0.02
+      - pos: [ -0.01, 0, 0.05 ]
+        radius: 0.02
+      - pos: [ -0.01, 0.033, 0.033 ]
+        radius: 0.02
+      - pos: [ -0.01, -0.033, -0.033 ]
+        radius: 0.02
+      - pos: [ -0.01, -0.033, 0.033 ]
+        radius: 0.02
+      - pos: [ -0.01, 0.033, -0.033 ]
+        radius: 0.02

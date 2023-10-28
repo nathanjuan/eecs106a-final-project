@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Load the URDF -->
+  <!-- <param name="robot_description" command="$(find xacro)/xacro -\-inorder '$(find ur_description)/urdf/ur5_robot.urdf.xacro'" /> -->
+
+  <!-- <node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" /> -->
+  <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" /> -->
+
+  <!-- Run RViz -->
+  <node name="rviz" pkg="rviz" type="rviz"
+        args="-d $(find abb_robot_sandbox)/config/jsp_vis_col.rviz" output="screen" required="true" />
+
+  <!-- Run the node. -->
+  <node name="rrt" pkg="abb_robot_sandbox" type="jsp_vis_collision.py" output="screen" />
+</launch>

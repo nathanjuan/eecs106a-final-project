@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Load the ABB IRB4600 URDF. -->
+  <param name="robot_description"
+         command="$(find xacro)/xacro --inorder '$(find abb_irb4600_support)/urdf/irb4600_20_250.xacro'" />
+
+  <!-- Run a node to publish TF tree for the robot arm from the joint states. -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher"
+        type="robot_state_publisher" output="screen" >
+    <param name="publish_frequency" value="30" />
+  </node>
+
+  <!-- Run the simulator node. -->
+  <node name="sim" pkg="abb_robot_sandbox" type="sim_node.py" output="screen" />
+
+  <!-- Run the controller node. -->
+  <node name="controller" pkg="abb_robot_sandbox"
+        type="controller_node.py" output="screen" />
+</launch>

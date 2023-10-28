@@ -1,0 +1,129 @@
+robot_configuration:
+  joint_count: 7
+  joint_names: ["iiwa_joint_1", "iiwa_joint_2", "iiwa_joint_3", "iiwa_joint_4", "iiwa_joint_5", "iiwa_joint_6", "iiwa_joint_7"]
+  link_names: ["iiwa_link_1", "iiwa_link_2", "iiwa_link_3", "iiwa_link_4", "iiwa_link_5", "iiwa_link_6", "iiwa_link_7"]
+  base_frame_id: iiwa_link_0
+  tip_frame_id: iiwa_link_ee
+  # To change the self-collision checking conditions, go to RRT.py and modify them in the self_collision() method
+
+# Dummy simulator parameters.
+dummy_sim:
+  freq: 50.0
+  robot_config: [0, 0, 0, 0, 0, 0, 0]
+  obstacle_collision_spheres: config/obstacle_collision_spheres.yaml
+  topics:
+    joint_states: /joint_states
+    joint_states_in: /in/joint_states
+
+# Dummy controller parameters.
+controller:
+  freq: 30.0
+
+  # EGM parameters (only needed for ABB controller).
+  egm:
+    port: 6511
+    rate: 250
+
+  # Tolerance (radians) of joint positions before moving to next waypoint.
+  joint_pos_tol: 0.01
+
+  robot_config: [0, 0, 0, 0, 0, 0, 0]
+  topics:
+    joint_states: /joint_states
+    joint_states_in: /in/joint_states
+    vis: /motion_planner/vis
+
+# Dummy pose estimator parameters.
+pose_estimator:
+  freq: 10.0
+  services:
+    start_vacuum_gripper: /start_vacuum_gripper
+    stop_vacuum_gripper: /stop_vacuum_gripper
+  world_frame_id: world
+  components:
+    fixed:
+      frame_id: fixed_component_base
+      pose:
+        pos: [0.722, 0, 0.456]
+        orien: [0, 0.7675435022360932, 0, 0.6409968581632458]
+    moveable:
+      frame_id: moveable_component_base
+      pose:
+        pos: [-0.577, 0, 1.063]
+        orien: [0, -0.21822962308076832, 0, 0.9758974493306282]
+
+# Motion planner parameters. NOTE: To switch between motion planners, change the top parameter key to rrt_motion_planner from motion_planner or vice-versa
+rrt_motion_planner:
+  nominal_joint_vel: 0.2 # 0.1
+  robot_collision_spheres: config/iiwa14_collision_spheres.yaml
+  obstacle_collision_spheres: config/obstacle_collision_spheres.yaml
+  smooth_path_total_duration: 0.5
+  smooth_path_timestep: 0.01
+  topics:
+    vis: /motion_planner/vis
+
+  workspace:
+    frame_id: world
+    center: [1, 0, 1.25]
+    extents: [4, 4, 2.5]
+
+  interpolation:
+    # Types of interpolation:
+    #   jointspace: linearly interpolates in jointspace.
+    #   taskspace: linearly interpolates in taskspace (i.e., the EE's pose)
+    type: taskspace
+
+    # Linear/angular velocities along the trajectory.
+    linear_vel: 0.2
+    angular_vel: 0.2
+
+    time_step: 0.03
+    pseudoinverse_damping: 0.2
+    pos_error_tol: 0.01
+    orien_error_tol: 0.01
+    gains: [1, 1, 1, 1, 1, 1, 1]
+    max_joint_vel: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2]
+
+# Task executor parameters.
+task_executor:
+  freq: 3.0
+  world_frame_id: world
+  topics:
+     joint_states: /joint_states
+#    joint_states: /rws/joint_states
+  services:
+    start_vacuum_gripper: /start_vacuum_gripper
+    stop_vacuum_gripper: /stop_vacuum_gripper
+  tasks:
+    - type: move_to_goal_pose
+      frame_id: iiwa_link_0 # TODO Change to AR marker frame id
+      pose:
+        pos: [0.722, 0, 0.456]
+        orien: [0, 0.7675435022360932, 0, 0.6409968581632458]
+    - type: wait_for_user_input
+      input: c
+    - type: move_to_goal_pose
+      frame_id: iiwa_link_0
+      pose:
+        pos: [-0.577, 0, 1.063]
+        orien: [0, -0.21822962308076832, 0, 0.9758974493306282]
+    # - type: wait_for_duration
+    #   sec: 1.25
+#    - type: start_vacuum_gripper
+#      robotiq: True
+#    - type: wait_for_user_input
+#      input: c
+#    - type: stop_vacuum_gripper
+#      robotiq: True
+
+    # - type: move_to_goal_pose
+    #   frame_id: world
+    #   pose:
+    #     pos: [1.5, 0, 0.5]
+    #     orien: [0, 1.5707, 0]
+    # - type: stop_vacuum_gripper
+    # - type: move_to_goal_pose
+    #   frame_id: world
+    #   pose:
+    #     pos: [1, -1, 0.5]
+    #     orien: [0, 1.5707, 0]

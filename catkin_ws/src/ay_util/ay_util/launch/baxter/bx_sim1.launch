@@ -1,0 +1,5 @@
+<launch>
+
+  <include file="$(find ay_util)/launch/baxter/bx_sim_world.launch"/>
+
+</launch>

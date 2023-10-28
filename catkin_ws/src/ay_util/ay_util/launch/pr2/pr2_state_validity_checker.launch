@@ -1,0 +1,11 @@
+<launch>
+  <!--<include file="$(find pr2_description)/robots/upload_pr2.launch" />-->
+  <include file="$(find ay_util)/urdf/upload_pr2_m100.launch" />
+
+  <include file="$(find ay_util)/urdf/pr2_moveit_planning_context.launch"/>
+
+  <node name="state_validity_checker" pkg="ay_util" type="state_validity_checker_node" respawn="false" output="screen">
+    <rosparam command="load" file="$(find ay_util)/urdf/pr2_moveit_kinematics.yaml"/>
+  </node>
+</launch>
+

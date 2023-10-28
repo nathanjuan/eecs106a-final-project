@@ -1,0 +1,26 @@
+<!--
+Common setup for 6DoF Mikata Arm.
+-->
+
+<launch>
+  <param name="robot_description"
+    command="$(find xacro)/xacro --inorder '$(find mikata_arm_6dof_description)/urdf/open_manipulator.urdf.xacro'"
+    />
+
+  <rosparam param="controller_joint_names">
+  [ 'joint1', 'joint2', 'joint3', 'joint4', 'joint5', 'joint6', 'gripper' ]
+  </rosparam>
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher"
+        name="robot_state_publisher" output="screen" />
+
+  <!--State validity checker:-->
+  <include file="$(find ay_util)/launch/mikata6/mikata6_state_validity_checker.launch"/>
+
+  <!--Joy stick-->
+  <arg name="jsdev" default="/dev/input/js0" />
+  <node pkg="joy" type="joy_node" name="joy_node" >
+    <param name="dev" type="string" value="$(arg jsdev)" />
+  </node>
+
+</launch>

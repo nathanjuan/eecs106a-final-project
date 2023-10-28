@@ -1,0 +1,34 @@
+<!--
+Setup real robot of UR5e.
+UR3e should be powered on before running this.
+-->
+
+<launch>
+
+  <arg name="kinematics_config" default="$(env HOME)/data/calib/ur/$(optenv UR5E_IP ur5ea)_calibration.yaml" />
+
+  <!--<include file="$(find ur_modern_driver)/launch/ur5e_bringup.launch">
+    <arg name="robot_ip" value="$(optenv UR5E_IP ur5ea)" />
+  </include>-->
+  <include file="$(find ur_robot_driver)/launch/ur5e_bringup.launch">
+    <arg name="robot_ip" value="$(optenv UR5E_IP ur5ea)" />
+    <arg name="kinematics_config" value="$(arg kinematics_config)" />
+  </include>
+
+  <!--Filter for the force/torque sensor on wrist-->
+  <node type="wrench_filter.py" pkg="ay_util" name="wrench_filter" output="screen">
+    <param name="topic_in" value="/wrench" />
+    <param name="topic_out" value="/wrench_filtered" />
+    <param name="N" value="10" />
+  </node>
+
+  <!--State validity checker:-->
+  <include file="$(find ay_util)/launch/ur/ur_state_validity_checker.launch"/>
+
+  <!--Joy stick-->
+  <arg name="jsdev" default="/dev/input/js1" />
+  <node pkg="joy" type="joy_node" name="joy_node" >
+    <param name="dev" type="string" value="$(arg jsdev)" />
+  </node>
+
+</launch>

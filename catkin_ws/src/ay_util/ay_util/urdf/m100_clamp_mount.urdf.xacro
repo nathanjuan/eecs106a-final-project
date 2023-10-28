@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<root xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+      xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+      xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+      xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <!-- Sentis m100 and its mount -->
+  <xacro:macro name="m100_clamp_mount" params="name parent *origin">
+    <joint name="${name}_joint" type="fixed">
+      <!-- <limit lower="0.1" upper="0.1" effort="10000" velocity="100.0"/> -->
+      <!-- <insert_block name="origin" /> -->
+      <origin xyz="0.053 0 0.02425" rpy="0 0 0"/>
+      <parent link="${parent}"/>
+      <child link="${name}_link"/>
+    </joint>
+    <link name="${name}_link">
+      <inertial>
+        <mass value="0.1" />
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.01"  ixy="0.0"  ixz="0.0"
+                 iyy="0.01"  iyz="0.0"
+                 izz="0.01" />
+      </inertial>
+      <visual>
+        <origin xyz="0.0 0.0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ay_util/meshes/m100_clamp_mount.stl" scale="0.01 0.01 0.01" />
+        </geometry>
+        <material name="gray">
+          <color rgba="0.5 0.5 0.5 1"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0.0 0.0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://ay_util/meshes/m100_clamp_mount.stl" scale="0.01 0.01 0.01" />
+        </geometry>
+      </collision>
+    </link>
+
+    <!--NOTE: it's better to add a sensor frame.
+        cf. pr2_description/urdf/sensors/kinect_prosilica_camera.urdf.xacro-->
+
+  </xacro:macro>
+
+
+</root>
+

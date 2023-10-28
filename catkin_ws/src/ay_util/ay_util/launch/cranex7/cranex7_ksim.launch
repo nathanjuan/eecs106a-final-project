@@ -1,0 +1,18 @@
+<!--
+Setup kinematics simulation of Crane-X7 Arm.
+-->
+
+<launch>
+
+  <arg name="jsdev" default="/dev/input/js0" />
+  <include file="$(find ay_util)/launch/cranex7/cranex7_cmn.launch">
+    <arg name="jsdev"  value="$(arg jsdev)" />
+  </include>
+
+  <node pkg="ay_util" type="dummy_robot.py"
+        name="cranex7_dummy" output="screen"
+        args="100" />
+
+  <node pkg="rviz" type="rviz" name="rviz"/>
+
+</launch>

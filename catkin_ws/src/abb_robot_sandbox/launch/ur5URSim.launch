@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_egm" default="false" />  <!-- Use EGM/dummy controller. -->
+  <arg name="planning_type" default="rrt" />
+  <arg name="robotiq_vacuum_gripper" default="false" />
+
+  <!-- IP and port of the robot controller (for RWS). -->
+  <arg name="robot_ip" default="127.0.0.1" />
+  <arg name="robot_port" default="50002" />
+
+
+  <param name="fixed_component_description"
+         command="$(find xacro)/xacro --inorder '$(find abb_robot_sandbox)/urdf/fixed_component.urdf'" />
+  <param name="moveable_component_description"
+         command="$(find xacro)/xacro --inorder '$(find abb_robot_sandbox)/urdf/moveable_component.urdf'" />
+
+  <!-- Run RViz for visualization. -->
+   <node name="rviz" pkg="rviz" type="rviz"
+         args="-d $(find abb_robot_sandbox)/config/ur5.rviz"
+         output="screen" required="true" />
+
+  <!-- Load the parameters. -->
+  <arg name="config"
+       default="$(find abb_robot_sandbox)/config/ur5_params.yaml" />
+  <rosparam command="load" file="$(arg config)" />
+
+  <!-- Run the dummy pose estimator node. -->
+  <node name="pose_estimator" pkg="abb_robot_sandbox"
+        type="dummy_pose_estimator_node.py" output="screen" />
+
+  <!-- Run the dummy simulator node -->
+  <node name="dummy_sim" pkg="abb_robot_sandbox"
+        type="dummy_sim_node.py" output="screen" />
+
+  <!-- Run the task executor node. -->
+  <!-- TODO -->
+
+  <node name="gripper_joint_state_publisher" pkg="abb_robot_sandbox"
+        type="gripper_joint_state_publisher.py" output="screen" />
+
+  <!-- Run the motion planner node. -->
+  <group if="$(eval arg('planning_type') == 'interpolation')">
+    <!-- Generate trajectories using interpolation -->
+    <node name="motion_planner" pkg="abb_robot_sandbox"
+          type="motion_planner_node.py" output="screen" />
+  </group>
+  <group if="$(eval arg('planning_type') == 'rrt')">
+    <!-- Generate trajectories using RRT -->
+    <node name="rrt_motion_planner" pkg="abb_robot_sandbox"
+          type="rrt_motion_planner_node.py" output="screen" />
+  </group>
+
+  <!-- Nodes to interface with Robotiq vacuum gripper. -->
+  <group if="$(arg robotiq_vacuum_gripper)">
+    <include file="$(find robotiq_vacuum_grippers_control)/launch/robotiq_vacuum_grippers_ethercat.launch" />
+  </group>
+  
+</launch>

@@ -1,0 +1,14 @@
+<!--
+Setup real robot of Mikata Arm.
+-->
+
+<launch>
+
+  <arg name="jsdev" default="/dev/input/js0" />
+  <include file="$(find ay_util)/launch/mikata/mikata_cmn.launch">
+    <arg name="jsdev"  value="$(arg jsdev)" />
+  </include>
+
+  <!--<node pkg="rviz" type="rviz" name="rviz"/>-->
+
+</launch>

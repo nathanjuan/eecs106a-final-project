@@ -1,0 +1,28 @@
+<!--
+Setup real robot of Kinova Gen3.
+Gen3 should be powered on before running this.
+-->
+
+<launch>
+
+  <arg name="robot_ip" default="gen3a" />
+  <arg name="robot_name" default="gen3a" />
+  <arg name="state_rate" default="500" />
+  <include file="$(find kortex_driver)/launch/kortex_driver.launch">
+    <arg name="ip_address" value="$(arg robot_ip)" />
+    <arg name="robot_name" value="$(arg robot_name)" />
+    <arg name="start_moveit" value="false" />
+    <arg name="start_rviz" value="false" />
+    <arg name="cyclic_data_publish_rate" value="$(arg state_rate)" />
+  </include>
+
+  <!--State validity checker:-->
+  <include file="$(find ay_util)/launch/gen3/gen3_state_validity_checker.launch"/>
+
+  <!--Joy stick-->
+  <arg name="jsdev" default="/dev/input/js0" />
+  <node pkg="joy" type="joy_node" name="joy_node" >
+    <param name="dev" type="string" value="$(arg jsdev)" />
+  </node>
+
+</launch>

@@ -1,0 +1,23 @@
+# Dynamixel-based gripper control
+
+# Command.  Available commands are:
+#   'Open'  Open the gripper.
+#   'Close' Close the gripper.
+#   'Stop'  Stop the gripper motion.
+#   'Move'  Move the gripper with the specified parameters.
+#   'StartHolding'   Start the holding controller (not available in all grippers).
+#   'StopHolding'    Stop the holding controller.
+
+string command
+
+float64[] pos
+float64[] max_effort
+float64[] speed
+bool blocking
+
+---
+
+# True: success, False: failure
+bool success
+# Error message
+string message

@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Run the rrt test node. -->
+  <node name="rrt" pkg="abb_robot_sandbox" type="troubleshooting_node.py" output="screen" />
+</launch>

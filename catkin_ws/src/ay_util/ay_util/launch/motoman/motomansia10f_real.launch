@@ -1,0 +1,21 @@
+<!--
+Setup real robot of Motoman SIA10f.
+This needs to be executed on the Motoman control PC.
+-->
+
+<launch>
+
+  <arg name="jsdev" default="/dev/input/js0" />
+  <include file="$(find ay_util)/launch/motoman/motomansia10f_cmn.launch">
+    <arg name="jsdev"  value="$(arg jsdev)" />
+  </include>
+
+  <include file="$(find motoman_driver)/launch/robot_interface_streaming_fs100.launch">
+    <arg name="robot_ip"  value="192.168.12.31" />
+  </include>
+
+  <node pkg="ay_util" type="robotiq_rtu_ctrl.py"
+        name="rq1" output="screen" respawn="true"
+        args="/dev/ttyUSB1 rq1 0.01" />
+
+</launch>

@@ -1,0 +1,119 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_egm" default="false" />  <!-- Use EGM/dummy controller. -->
+  <arg name="planning_type" default="interpolation" />
+  <arg name="robotiq_vacuum_gripper" default="false" />
+
+  <!-- IP and port of the robot controller (for RWS). -->
+  <arg name="robot_ip" default="127.0.0.1" />
+  <arg name="robot_port" default="80" />
+
+  <!-- Load the Universal Robot UR5 URDF. -->
+  <param name="robot_description"
+         command="$(find xacro)/xacro --inorder '$(find ur_description)/urdf/ur5_robot.urdf.xacro'" />
+
+  <param name="fixed_component_description"
+         command="$(find xacro)/xacro --inorder '$(find abb_robot_sandbox)/urdf/fixed_component.urdf'" />
+  <param name="moveable_component_description"
+         command="$(find xacro)/xacro --inorder '$(find abb_robot_sandbox)/urdf/moveable_component.urdf'" />
+
+  <!-- Run RViz for visualization. -->
+  <node name="rviz" pkg="rviz" type="rviz"
+        args="-d $(find abb_robot_sandbox)/config/ur5.rviz"
+        output="screen" required="true" />
+
+  <!-- Load the parameters. -->
+  <arg name="config"
+       default="$(find abb_robot_sandbox)/config/ur5_params.yaml" />
+  <rosparam command="load" file="$(arg config)" />
+
+  <!-- Using EGM interface to real/virtual robot controller. -->
+  <group if="$(arg use_egm)">
+    <!-- Run the robot state publisher. -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher"
+          type="robot_state_publisher">
+      <!-- TODO Is this the best topic to listen to? -->
+      <remap from="joint_states" to="/rws/joint_states" />
+    </node>
+
+    <node name="controller" pkg="abb_robot_sandbox"
+          type="egm_controller_node.py" output="screen" />
+
+    <!-- RWS state publisher (i.e. general states about the robot controller) -->
+    <include file="$(find abb_rws_state_publisher)/launch/rws_state_publisher.launch">
+      <arg name="robot_ip" value="$(arg robot_ip)" />
+      <arg name="robot_port" value="$(arg robot_port)" />
+    </include>
+
+    <!-- RWS service provider (i.a. starting/stopping the robot controller's
+         RAPID execution) -->
+    <include file="$(find abb_rws_service_provider)/launch/rws_service_provider.launch">
+      <arg name="robot_ip" value="$(arg robot_ip)" />
+      <arg name="robot_port" value="$(arg robot_port)" />
+    </include>
+
+    <!-- EGM hardware interface (i.e. 'ros_control'-based interface for
+         interacting with mechanical units) -->
+    <include file="$(find abb_egm_hardware_interface)/launch/egm_hardware_interface.launch">
+      <arg name="base_config_file"
+           value="$(find abb_robot_sandbox)/config/egm/hardware_base.yaml" />
+      <arg name="egm_config_file"
+           value="$(find abb_robot_sandbox)/config/egm/hardware_egm.yaml" />
+    </include>
+
+    <!-- Put 'ros_control' components in the "egm" namespace (to match the
+         hardware interface) -->
+    <group ns="egm">
+      <!-- Load configurations for 'ros_control' controllers on the parameter server -->
+      <rosparam file="$(find abb_robot_sandbox)/config/egm/controllers.yaml"
+                command="load" />
+
+      <!-- Two 'ros_control' controller spawners (stopped for the controller
+           that command motions) -->
+      <node pkg="controller_manager" type="spawner" name="started"
+            args="egm_state_controller joint_state_controller" />
+      <node pkg="controller_manager" type="spawner" name="stopped"
+            args="--stopped joint_group_position_controller" />
+    </group>
+  </group>
+
+  <!-- NOT using EGM interface. -->
+  <group unless="$(arg use_egm)">
+    <!-- Run the robot state publisher. -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher"
+          type="robot_state_publisher" />
+
+    <!-- Run the dummy simulator node. -->
+    <node name="dummy_sim" pkg="abb_robot_sandbox" type="dummy_sim_node.py"
+          output="screen" />
+
+    <!-- Run the dummy controller node. -->
+    <node name="controller" pkg="abb_robot_sandbox"
+          type="dummy_controller_node.py" output="screen" />
+  </group>
+
+  <!-- Run the dummy pose estimator node. -->
+  <node name="pose_estimator" pkg="abb_robot_sandbox"
+        type="dummy_pose_estimator_node.py" output="screen" />
+
+  <!-- Run the task executor node. -->
+  <!-- TODO -->
+
+  <!-- Run the motion planner node. -->
+  <group if="$(eval arg('planning_type') == 'interpolation')">
+    <!-- Generate trajectories using interpolation -->
+    <node name="motion_planner" pkg="abb_robot_sandbox"
+          type="motion_planner_node.py" output="screen" />
+  </group>
+  <group if="$(eval arg('planning_type') == 'rrt')">
+    <!-- Generate trajectories using RRT -->
+    <node name="rrt_motion_planner" pkg="abb_robot_sandbox"
+          type="rrt_motion_planner_node.py" output="screen" />
+  </group>
+
+  <!-- Nodes to interface with Robotiq vacuum gripper. -->
+  <group if="$(arg robotiq_vacuum_gripper)">
+    <include file="$(find robotiq_vacuum_grippers_control)/launch/robotiq_vacuum_grippers_ethercat.launch" />
+  </group>
+  
+</launch>

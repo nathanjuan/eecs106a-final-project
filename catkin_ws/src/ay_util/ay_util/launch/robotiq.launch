@@ -1,0 +1,16 @@
+<launch>
+
+  <!--<node pkg="ay_util" type="robotiq_tcp_ctrl.py"
+        name="rq1"
+        args="rq1 rq1 400.0" />-->
+  <node pkg="ay_util" type="robotiq_rtu_ctrl.py"
+        name="rq1" output="screen" respawn="true"
+        args="/dev/ttyUSB1 rq1 0.01" />
+
+  <arg name="jsdev" default="/dev/input/js1" />
+
+  <node pkg="joy" type="joy_node" name="joy_node" >
+    <param name="dev" type="string" value="$(arg jsdev)" />
+  </node>
+
+</launch>

@@ -1,0 +1,5 @@
+<launch>
+  <node name="state_validity_checker" pkg="ay_util" type="state_validity_checker_node" respawn="false" output="screen">
+    <!--<rosparam command="load" file="$(find baxter_moveit_config)/config/kinematics.yaml"/>-->
+  </node>
+</launch>

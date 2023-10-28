@@ -1,0 +1,14 @@
+<launch>
+  <!--<include file="$(find pr2_description)/robots/upload_pr2.launch" />-->
+  <!--<include file="$(find ay_util)/urdf/upload_pr2_m100.launch" />-->
+
+  <include file="$(find baxter_moveit_config)/launch/planning_context.launch"/>
+
+  <!--Convert /robot/joint_states to /joint_states for MoveIt-->
+  <node name="bx_joint_states" pkg="ay_util" type="bx_joint_states.py" />
+
+  <node name="state_validity_checker" pkg="ay_util" type="state_validity_checker_node" respawn="false" output="screen">
+    <!--<remap from="/joint_states" to="/robot/joint_states" />-->
+    <rosparam command="load" file="$(find baxter_moveit_config)/config/kinematics.yaml"/>
+  </node>
+</launch>

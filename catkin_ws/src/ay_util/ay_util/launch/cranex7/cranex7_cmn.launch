@@ -1,0 +1,36 @@
+<!--
+Common setup for Crane-X7 Arm.
+-->
+
+<launch>
+  <param name="robot_description"
+    command="$(find xacro)/xacro --inorder '$(find crane_x7_description)/urdf/crane_x7.urdf.xacro'"
+    />
+
+  <rosparam param="controller_joint_names">
+  [ 'crane_x7_shoulder_fixed_part_pan_joint',
+    'crane_x7_shoulder_revolute_part_tilt_joint',
+    'crane_x7_upper_arm_revolute_part_twist_joint',
+    'crane_x7_upper_arm_revolute_part_rotate_joint',
+    'crane_x7_lower_arm_fixed_part_joint',
+    'crane_x7_lower_arm_revolute_part_joint',
+    'crane_x7_wrist_joint',
+    'crane_x7_gripper_finger_a_joint' ]
+  </rosparam>
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher"
+        name="robot_state_publisher" output="screen" />
+  <!--<node pkg="tf2_ros" type="static_transform_publisher"
+        name="tf_base_base_link" output="screen"
+        args="0 0 0 0 0 0 1 base base_link" />-->
+
+  <!--State validity checker:-->
+  <include file="$(find ay_util)/launch/cranex7/cranex7_state_validity_checker.launch"/>
+
+  <!--Joy stick-->
+  <arg name="jsdev" default="/dev/input/js0" />
+  <node pkg="joy" type="joy_node" name="joy_node" >
+    <param name="dev" type="string" value="$(arg jsdev)" />
+  </node>
+
+</launch>

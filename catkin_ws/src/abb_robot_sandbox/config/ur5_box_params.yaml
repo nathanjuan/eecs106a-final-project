@@ -1,0 +1,124 @@
+robot_configuration:
+  collision_spheres: config/ur5_collision_spheres.yaml
+  joint_count: 6
+  manipulator_joint_names: [shoulder_pan_joint, shoulder_lift_joint, elbow_joint, wrist_1_joint, wrist_2_joint, wrist_3_joint]
+  link_names: [shoulder_link, upper_arm_link, forearm_link, wrist_1_link, wrist_2_link, wrist_3_link]
+  base_frame_id: base_link
+  tip_frame_id: wrist_3_link
+  has_finger_joint: true
+  finger_joint_name: finger_joint
+  joint_names_to_tip: [shoulder_pan_joint, shoulder_lift_joint, elbow_joint, wrist_1_joint, wrist_2_joint, wrist_3_joint]
+  # To change the self-collision checking conditions, go to RRT.py and modify them in the self_collision() method
+
+# Dummy simulator parameters.
+dummy_sim:
+  freq: 50.0
+  robot_config: [0, 0, 0, 0, 0, 0, 0]
+  obstacle_collision_spheres: config/box_collision_spheres.yaml
+  topics:
+    joint_states: /joint_states
+
+# Dummy controller parameters.
+controller:
+  freq: 30.0
+
+  # EGM parameters (only needed for ABB controller).
+  egm:
+    port: 6511
+    rate: 250
+
+  # Tolerance (radians) of joint positions before moving to next waypoint.
+  joint_pos_tol: 0.01
+
+  robot_config: [0, 0, 0, 0, 0, 0]
+  topics:
+    joint_states: /joint_states
+    joint_states_in: /in/joint_states
+    vis: /motion_planner/vis
+
+# Dummy pose estimator parameters.
+pose_estimator:
+  freq: 10.0
+  services:
+    start_vacuum_gripper: /start_vacuum_gripper
+    stop_vacuum_gripper: /stop_vacuum_gripper
+  world_frame_id: world
+  components:
+    fixed:
+      frame_id: fixed_component_base
+      pose:
+        pos: [0.722, 0, 0.456]
+        orien: [0, 0.7675435022360932, 0, -0.6409968581632458]
+    moveable:
+      frame_id: moveable_component_base
+      pose:
+        pos: [0.645, -0.040, 0.752]
+        orien: [-0.0039871760259544975, 0.32816858038796054, 0.6032693419713309, 0.726880723579162]
+
+# Motion planner parameters. NOTE: To switch between motion planners, change the top parameter key to rrt_motion_planner from motion_planner or vice-versa
+rrt_motion_planner:
+  nominal_joint_vel: 0.2 # 0.1
+  robot_collision_spheres: config/ur5_collision_spheres.yaml
+  obstacle_collision_spheres: config/box_collision_spheres.yaml
+  smooth_path_total_duration: 1.75
+  smooth_path_timestep: 0.01
+  topics:
+    vis: /motion_planner/vis
+
+  workspace:
+    frame_id: world
+    center: [1, 0, 1.25]
+    extents: [4, 4, 2.5]
+
+  interpolation:
+    # Types of interpolation:
+    #   jointspace: linearly interpolates in jointspace.
+    #   taskspace: linearly interpolates in taskspace (i.e., the EE's pose)
+    type: taskspace
+
+    # Linear/angular velocities along the trajectory.
+    linear_vel: 0.2
+    angular_vel: 0.2
+
+    time_step: 0.03
+    pseudoinverse_damping: 0.2
+    pos_error_tol: 0.01
+    orien_error_tol: 0.01
+    gains: [1, 1, 1, 1, 1, 1]
+    max_joint_vel: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2]
+
+# Task executor parameters.
+task_executor:
+  freq: 3.0
+  world_frame_id: world
+  topics:
+     joint_states: /joint_states
+#    joint_states: /rws/joint_states
+  services:
+    start_vacuum_gripper: /start_vacuum_gripper
+    stop_vacuum_gripper: /stop_vacuum_gripper
+  tasks:
+    - type: wait_for_user_input
+      input: c
+    - type: activate_parallel_gripper
+    - type: set_parallel_gripper_pos
+      pos: 0
+    - type: move_to_goal_pose
+      frame_id: base_link
+      pose:
+        pos: [ -0.36716232477909744, -0.5091127047562124, 0.3732349001932018 ]
+        orien: [ 0.934735315522768, 0.3537826839196533, 0.014827241715507056, -0.029796902125352354 ]
+    - type: wait_for_user_input
+      input: c
+    - type: set_parallel_gripper_pos
+      pos: 80
+    - type: wait_for_user_input
+      input: c
+    - type: move_to_goal_pose
+      frame_id: base_link
+      pose:
+        pos: [0.28344454283423887, -0.5654826355499715, 0.39081530430829015]
+        orien: [0.5999391242889176, 0.7994793957807665, -0.021484529741129257, -0.021075052817720423]
+    - type: set_parallel_gripper_pos
+      pos: 0
+
