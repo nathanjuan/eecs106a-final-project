@@ -4,3 +4,5 @@ Rishi Yang
 Yarden Goraly
 Nathan Luan
 Vint Lee
+
+Guide: https://docs.google.com/document/d/1LiBr485hCvnpTVi90FoljeGexzEYnljqE2dXsjd6uik/edit#heading=h.kc2ws2ma7twt
