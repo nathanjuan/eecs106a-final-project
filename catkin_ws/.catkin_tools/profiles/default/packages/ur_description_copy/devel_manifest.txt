@@ -1,0 +1,5 @@
+ur_description_copy
+/home/ur5/catkin_ws/devel/.private/ur_description_copy/cmake.lock /home/ur5/catkin_ws/devel/./cmake.lock
+/home/ur5/catkin_ws/devel/.private/ur_description_copy/lib/pkgconfig/ur_description_copy.pc /home/ur5/catkin_ws/devel/lib/pkgconfig/ur_description_copy.pc
+/home/ur5/catkin_ws/devel/.private/ur_description_copy/share/ur_description_copy/cmake/ur_description_copyConfig.cmake /home/ur5/catkin_ws/devel/share/ur_description_copy/cmake/ur_description_copyConfig.cmake
+/home/ur5/catkin_ws/devel/.private/ur_description_copy/share/ur_description_copy/cmake/ur_description_copyConfig-version.cmake /home/ur5/catkin_ws/devel/share/ur_description_copy/cmake/ur_description_copyConfig-version.cmake

@@ -114,7 +114,7 @@ class URSimTaskExecutor:
             rospy.logwarn("[TaskExecutor] Task index {} out of bounds!".format(
                 self._task_index))
             return False
-
+        
         task = self._tasks[self._task_index]
         if task["type"] == "move_to_goal_pose":
             # Move the end-effector to the goal pose, in the specified frame.
@@ -182,6 +182,8 @@ class URSimTaskExecutor:
             
             manipulator_joint_state_msg = None
             finger_joint_state_msg = None
+            
+            #i think this block is to get the current state?
             while True:
                 joint_state_msg = rospy.wait_for_message(self._joint_states_topic, JointState)
                 if self._has_finger_joint and joint_state_msg.name[0] == self._finger_joint_name:

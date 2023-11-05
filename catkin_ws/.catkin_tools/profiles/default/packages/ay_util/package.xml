@@ -1,0 +1,42 @@
+<package>
+  <name>ay_util</name>
+  <version>1.0.0</version>
+  <description>ay_util</description>
+  <maintainer email="info@akihikoy.net">Akihiko Yamaguchi</maintainer>
+
+  <license>Described in LICENSE</license>
+
+  <url type="website">http://akihikoy.net</url>
+  <!-- <url type="bugtracker"></url> -->
+
+  <author>Akihiko Yamaguchi</author>
+
+  <!-- Dependencies which this package needs to build itself. -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- Dependencies needed to compile this package. -->
+  <build_depend>ay_util_msgs</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>eigen_conversions</build_depend>
+  <build_depend>moveit_core</build_depend>
+  <build_depend>moveit_ros_planning_interface</build_depend>
+
+  <!-- Dependencies needed after this package is compiled. -->
+  <run_depend>ay_util_msgs</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>eigen_conversions</run_depend>
+  <run_depend>moveit_core</run_depend>
+  <run_depend>moveit_ros_planning_interface</run_depend>
+
+  <!-- Dependencies needed only for running tests. -->
+  <!-- <test_depend>ay_util_msgs</test_depend> -->
+  <!-- <test_depend>roscpp</test_depend> -->
+  <!-- <test_depend>eigen_conversions</test_depend> -->
+  <!-- <test_depend>moveit_core</test_depend> -->
+  <!-- <test_depend>moveit_ros_planning_interface</test_depend> -->
+
+  <export>
+    <cpp lflags="-L${prefix}/lib" cflags="-I${prefix}/include"/>
+  </export>
+
+</package>

@@ -100,9 +100,9 @@ task_executor:
   tasks:
     - type: wait_for_user_input
       input: c
-    - type: activate_parallel_gripper
-    - type: set_parallel_gripper_pos
-      pos: 0
+    # - type: activate_parallel_gripper
+    # - type: set_parallel_gripper_pos
+      # pos: 0
     - type: move_to_goal_pose
       frame_id: base_link
       pose:
@@ -110,8 +110,8 @@ task_executor:
         orien: [ 0.934735315522768, 0.3537826839196533, 0.014827241715507056, -0.029796902125352354 ]
     - type: wait_for_user_input
       input: c
-    - type: set_parallel_gripper_pos
-      pos: 80
+    # - type: set_parallel_gripper_pos
+    #   pos: 80
     - type: wait_for_user_input
       input: c
     - type: move_to_goal_pose
@@ -119,6 +119,6 @@ task_executor:
       pose:
         pos: [0.28344454283423887, -0.5654826355499715, 0.39081530430829015]
         orien: [0.5999391242889176, 0.7994793957807665, -0.021484529741129257, -0.021075052817720423]
-    - type: set_parallel_gripper_pos
-      pos: 0
+    # - type: set_parallel_gripper_pos
+    #   pos: 0
 
