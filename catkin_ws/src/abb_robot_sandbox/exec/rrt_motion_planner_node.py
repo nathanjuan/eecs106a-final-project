@@ -256,7 +256,7 @@ class RRTMotionPlanner:
 
 
 def main():
-    rospy.init_node("rrt_motion_planner")
+    rospy.init_node("rrt_motion_planner", log_level=rospy.DEBUG)
 
     planner = RRTMotionPlanner(rospy.get_name())
     if not planner.init():

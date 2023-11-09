@@ -100,9 +100,9 @@ task_executor:
   tasks:
     - type: wait_for_user_input
       input: c
-    # - type: activate_parallel_gripper
-    # - type: set_parallel_gripper_pos
-      # pos: 0
+    - type: activate_parallel_gripper
+    - type: set_parallel_gripper_pos
+      pos: 0
     - type: move_to_goal_pose
       frame_id: base_link
       pose:
@@ -110,8 +110,8 @@ task_executor:
         orien: [ 0.934735315522768, 0.3537826839196533, 0.014827241715507056, -0.029796902125352354 ]
     - type: wait_for_user_input
       input: c
-    # - type: set_parallel_gripper_pos
-    #   pos: 80
+    - type: set_parallel_gripper_pos
+      pos: 80
     - type: wait_for_user_input
       input: c
     - type: move_to_goal_pose
