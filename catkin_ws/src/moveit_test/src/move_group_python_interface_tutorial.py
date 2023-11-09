@@ -161,7 +161,7 @@ class MoveGroupPythonIntefaceTutorial(object):
     ## thing we want to do is move it to a slightly better configuration.
     # We can get the joint values from the group and adjust some of the values:
     joint_goal = move_group.get_current_joint_values()
-    print(joint_goal, '\n-------------------')
+    print(joint_goal, '\n-------------------\n')
     joint_goal[0] = 0
     joint_goal[1] = -pi/4
     joint_goal[2] = 0

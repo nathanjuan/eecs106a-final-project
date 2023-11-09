@@ -22,8 +22,8 @@ joint_state_controller:
   type: joint_state_controller/JointStateController
   publish_rate: 50
 controller_list:
-- name: "scaled_pos_joint_traj_controller"
-  action_ns: scaled_pos_traj_controller/follow_joint_trajectory
+- name: scaled_pos_joint_traj_controller
+  action_ns: follow_joint_trajectory
   type: FollowJointTrajectory
   joints:
     - shoulder_pan_joint
@@ -32,3 +32,18 @@ controller_list:
     - wrist_1_joint
     - wrist_2_joint
     - wrist_3_joint
+# Old
+# joint_state_controller:
+#   type: joint_state_controller/JointStateController
+#   publish_rate: 50
+# controller_list:
+# - name: "scaled_pos_joint_traj_controller" #<----- edited
+#   action_ns: scaled_pos_traj_controller/follow_joint_trajectory #<----- edited
+#   type: FollowJointTrajectory
+#   joints:
+#     - shoulder_pan_joint
+#     - shoulder_lift_joint
+#     - elbow_joint
+#     - wrist_1_joint
+#     - wrist_2_joint
+#     - wrist_3_joint
