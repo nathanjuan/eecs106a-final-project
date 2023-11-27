@@ -1,9 +1,0 @@
-fingervision/fingervision
-/home/ur5/catkin_ws/devel/.private/fingervision/cmake.lock /home/ur5/catkin_ws/devel/./cmake.lock
-/home/ur5/catkin_ws/devel/.private/fingervision/lib/libfv_blob_tracker2.so /home/ur5/catkin_ws/devel/lib/libfv_blob_tracker2.so
-/home/ur5/catkin_ws/devel/.private/fingervision/lib/libfv_prox_vision.so /home/ur5/catkin_ws/devel/lib/libfv_prox_vision.so
-/home/ur5/catkin_ws/devel/.private/fingervision/lib/libay_vision.so /home/ur5/catkin_ws/devel/lib/libay_vision.so
-/home/ur5/catkin_ws/devel/.private/fingervision/lib/fingervision/fv_core_node /home/ur5/catkin_ws/devel/lib/fingervision/fv_core_node
-/home/ur5/catkin_ws/devel/.private/fingervision/lib/pkgconfig/fingervision.pc /home/ur5/catkin_ws/devel/lib/pkgconfig/fingervision.pc
-/home/ur5/catkin_ws/devel/.private/fingervision/share/fingervision/cmake/fingervisionConfig-version.cmake /home/ur5/catkin_ws/devel/share/fingervision/cmake/fingervisionConfig-version.cmake
-/home/ur5/catkin_ws/devel/.private/fingervision/share/fingervision/cmake/fingervisionConfig.cmake /home/ur5/catkin_ws/devel/share/fingervision/cmake/fingervisionConfig.cmake

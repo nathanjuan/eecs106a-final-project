@@ -1,5 +1,0 @@
-ur5/ur5_description
-/home/ur5/catkin_ws/devel/.private/ur5_description/cmake.lock /home/ur5/catkin_ws/devel/./cmake.lock
-/home/ur5/catkin_ws/devel/.private/ur5_description/lib/pkgconfig/ur5_description.pc /home/ur5/catkin_ws/devel/lib/pkgconfig/ur5_description.pc
-/home/ur5/catkin_ws/devel/.private/ur5_description/share/ur5_description/cmake/ur5_descriptionConfig.cmake /home/ur5/catkin_ws/devel/share/ur5_description/cmake/ur5_descriptionConfig.cmake
-/home/ur5/catkin_ws/devel/.private/ur5_description/share/ur5_description/cmake/ur5_descriptionConfig-version.cmake /home/ur5/catkin_ws/devel/share/ur5_description/cmake/ur5_descriptionConfig-version.cmake

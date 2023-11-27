@@ -1,3 +1,0 @@
----
-#full allowed collision matrix
-moveit_msgs/AllowedCollisionMatrix allowed_collision_matrix

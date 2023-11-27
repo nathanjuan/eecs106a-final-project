@@ -1,6 +1,0 @@
-ay_py
-/home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/.private/ay_py/cmake.lock /home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/./cmake.lock
-/home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/.private/ay_py/lib/python2.7/dist-packages/ay_py/__init__.py /home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/lib/python2.7/dist-packages/ay_py/__init__.py
-/home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/.private/ay_py/lib/pkgconfig/ay_py.pc /home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/lib/pkgconfig/ay_py.pc
-/home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/.private/ay_py/share/ay_py/cmake/ay_pyConfig.cmake /home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/share/ay_py/cmake/ay_pyConfig.cmake
-/home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/.private/ay_py/share/ay_py/cmake/ay_pyConfig-version.cmake /home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/share/ay_py/cmake/ay_pyConfig-version.cmake

@@ -1,6 +1,0 @@
-robotiq/robotiq_modbus_tcp
-/home/ur5/catkin_ws/devel/.private/robotiq_modbus_tcp/cmake.lock /home/ur5/catkin_ws/devel/./cmake.lock
-/home/ur5/catkin_ws/devel/.private/robotiq_modbus_tcp/lib/python2.7/dist-packages/robotiq_modbus_tcp/__init__.py /home/ur5/catkin_ws/devel/lib/python2.7/dist-packages/robotiq_modbus_tcp/__init__.py
-/home/ur5/catkin_ws/devel/.private/robotiq_modbus_tcp/lib/pkgconfig/robotiq_modbus_tcp.pc /home/ur5/catkin_ws/devel/lib/pkgconfig/robotiq_modbus_tcp.pc
-/home/ur5/catkin_ws/devel/.private/robotiq_modbus_tcp/share/robotiq_modbus_tcp/cmake/robotiq_modbus_tcpConfig-version.cmake /home/ur5/catkin_ws/devel/share/robotiq_modbus_tcp/cmake/robotiq_modbus_tcpConfig-version.cmake
-/home/ur5/catkin_ws/devel/.private/robotiq_modbus_tcp/share/robotiq_modbus_tcp/cmake/robotiq_modbus_tcpConfig.cmake /home/ur5/catkin_ws/devel/share/robotiq_modbus_tcp/cmake/robotiq_modbus_tcpConfig.cmake

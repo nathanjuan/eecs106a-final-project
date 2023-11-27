@@ -1,1 +1,0 @@
-../../fingervision/fingervision/scripts/conf_cam2.py

@@ -1,7 +1,0 @@
-abb_driver
-/home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/.private/abb_driver/cmake.lock /home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/./cmake.lock
-/home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/.private/abb_driver/lib/pkgconfig/abb_driver.pc /home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/lib/pkgconfig/abb_driver.pc
-/home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/.private/abb_driver/lib/abb_driver/motion_download_interface /home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/lib/abb_driver/motion_download_interface
-/home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/.private/abb_driver/lib/abb_driver/robot_state /home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/lib/abb_driver/robot_state
-/home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/.private/abb_driver/share/abb_driver/cmake/abb_driverConfig.cmake /home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/share/abb_driver/cmake/abb_driverConfig.cmake
-/home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/.private/abb_driver/share/abb_driver/cmake/abb_driverConfig-version.cmake /home/ur5/eecs106a-final-project-kaylene-group3/catkin_ws/devel/share/abb_driver/cmake/abb_driverConfig-version.cmake

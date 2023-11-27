@@ -1,5 +1,0 @@
-ucb_ur_launch
-/home/ur5/catkin_ws/devel/.private/ucb_ur_launch/cmake.lock /home/ur5/catkin_ws/devel/./cmake.lock
-/home/ur5/catkin_ws/devel/.private/ucb_ur_launch/lib/pkgconfig/ucb_ur_launch.pc /home/ur5/catkin_ws/devel/lib/pkgconfig/ucb_ur_launch.pc
-/home/ur5/catkin_ws/devel/.private/ucb_ur_launch/share/ucb_ur_launch/cmake/ucb_ur_launchConfig.cmake /home/ur5/catkin_ws/devel/share/ucb_ur_launch/cmake/ucb_ur_launchConfig.cmake
-/home/ur5/catkin_ws/devel/.private/ucb_ur_launch/share/ucb_ur_launch/cmake/ucb_ur_launchConfig-version.cmake /home/ur5/catkin_ws/devel/share/ucb_ur_launch/cmake/ucb_ur_launchConfig-version.cmake

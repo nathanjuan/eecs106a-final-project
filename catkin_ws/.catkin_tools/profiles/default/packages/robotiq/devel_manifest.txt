@@ -1,2 +1,0 @@
-robotiq/robotiq
-/home/ur5/catkin_ws/devel/.private/robotiq/cmake.lock /home/ur5/catkin_ws/devel/./cmake.lock

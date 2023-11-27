@@ -1,1 +1,0 @@
-../fingervision/scripts/conf_cam_gui.py
