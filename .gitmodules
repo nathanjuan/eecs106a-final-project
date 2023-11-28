@@ -1,6 +1,0 @@
-[submodule "final_project/src/robotiq"]
-	path = final_project/src/robotiq
-	url = https://github.com/TAMS-Group/robotiq.git
-[submodule "final_project/src/Universal_Robots_ROS_Driver"]
-	path = final_project/src/Universal_Robots_ROS_Driver
-	url = https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git
