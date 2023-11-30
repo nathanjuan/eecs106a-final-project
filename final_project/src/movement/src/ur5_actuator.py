@@ -142,20 +142,20 @@ class UR5_Manipulator(object):
             "Robotiq2FGripperRobotInput", robotiq_inputMsg.Robotiq2FGripper_robot_input, self.gripper_status_callback)
 
 
-    def go_to_joint_state(self):
+    def go_to_joint_state(self, joint_goal):
 
         ## BEGIN_SUB_TUTORIAL plan_to_joint_state
         ##
         ## Planning to a Joint Goal
         ## ^^^^^^^^^^^^^^^^^^^^^^^^
         # We get the joint values from the group and change some of the values:
-        joint_goal = self.move_group.get_current_joint_values()
-        joint_goal[0] = 0
-        joint_goal[1] = -2*pi / 8
-        joint_goal[2] = 0
-        joint_goal[3] = -2*pi / 4
-        joint_goal[4] = 0
-        joint_goal[5] = 2*pi / 6  # 1/6 of a turn
+        # joint_goal = self.move_group.get_current_joint_values()
+        # joint_goal[0] = 0
+        # joint_goal[1] = -2*pi / 8
+        # joint_goal[2] = 0
+        # joint_goal[3] = -2*pi / 4
+        # joint_goal[4] = 0
+        # joint_goal[5] = 2*pi / 6  # 1/6 of a turn
 
         # The go command can be called with joint values, poses, or without any
         # parameters if you have already set the pose or joint target for the group
@@ -426,7 +426,7 @@ class UR5_Manipulator(object):
         gripper_command = robotiq_outputMsg.Robotiq2FGripper_robot_output()
         gripper_command.rACT = rACT # must remain at 1, will activate upon being switched to one
         gripper_command.rGTO = rGTO # 1 means it is following the go to routine
-        gripper_command.rGTO = rATR # set to 1 for automatic release routine
+        gripper_command.rATR = rATR # set to 1 for automatic release routine
         gripper_command.rPR = rPR
         gripper_command.rSP = rSP # 1/2 max speed
         gripper_command.rFR = rFR # 1/4 max force
@@ -436,7 +436,7 @@ class UR5_Manipulator(object):
         self.gripper_status = robotiq_inputMsg
     def activate_gripper(self):
         #if gripper.status.rACT == 1: give warining to activate
-        self.send_gripper_commad(rPR=0, rACT=1)
+        self.send_gripper_commad(rPR=0, rACT=1, rGTO=1)
 
     def open_gripper(self):
         #if gripper.status.rACT == 0: give warining to activate
@@ -508,13 +508,87 @@ def test():
         return
 
 def executor():
-    pass
+    ur5 = UR5_Manipulator()
+    # ur5.robot.set_
+    ur5.activate_gripper()
+    
+    input(
+            "============ Press `Enter` to move to joint goal"
+        )
+    ur5.open_gripper()
+    joint_goal = ur5.move_group.get_current_joint_values()
+    joint_goal[0] = -1.61 # shoulder pan
+
+    joint_goal[1] = -2.16 # sholder lift
+    joint_goal[2] = -1.08 #  elbow
+    joint_goal[3] = 4.84 
+    joint_goal[4] = 1.60
+    joint_goal[5] = 2.85
+    ur5.go_to_joint_state(joint_goal)
+    
+    input(
+            "============ Press `Enter` to grab"
+        )
+    ur5.close_gripper()
+
+    
+
+    input(
+            "============ Press `Enter` to move to joint goal"
+        )
+    
+    joint_goal = ur5.move_group.get_current_joint_values()
+    joint_goal[0] = -1.13 # shoulder pan
+
+    joint_goal[1] = -1.96 # sholder lift
+    joint_goal[2] = -1.08 #  elbow
+    joint_goal[3] = 4.84 
+    joint_goal[4] = 1.60
+    joint_goal[5] = 2.85
+    ur5.go_to_joint_state(joint_goal)
+
+
+
+    input(
+            "============ Press `Enter` to move to joint goal"
+        )
+    
+    joint_goal = ur5.move_group.get_current_joint_values()
+    joint_goal[0] = -1.61 # shoulder pan
+
+    joint_goal[1] = -2.16 # sholder lift
+    joint_goal[2] = -1.08 #  elbow
+    joint_goal[3] = 4.84 
+    joint_goal[4] = 1.60
+    joint_goal[5] = 2.85
+    ur5.go_to_joint_state(joint_goal)
+
+    input(
+            "============ Press `Enter` to let go"
+        )
+    ur5.open_gripper()
+
+    # input(
+    #         "============ Press `Enter` to move to joint goal"
+    #     )
+    
+    # joint_goal = ur5.move_group.get_current_joint_values()
+    # joint_goal[0] = -1.08 
+
+    # joint_goal[1] = -2.16
+    # joint_goal[2] = -1.61
+    # joint_goal[3] = -4.84
+    # joint_goal[4] = 1.60
+    # joint_goal[5] = 2.85
+    # ur5.go_to_joint_state(joint_goal)
+    return
     #intialize robot
 
     #get camera to world frame locations
     #get list of block locations
     #get list of goal locations
     #choose random block and goal
+    
     block_pose = geometry_msgs.msg.Pose()
     #move block to goal
         #make frame that is centered on manipulator grab zone
@@ -531,4 +605,5 @@ def executor():
     #repeat until all blocks in goal
 
 if __name__ == "__main__":
-    test()
+
+    executor()
