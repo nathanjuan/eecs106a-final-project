@@ -6,6 +6,7 @@ Nathan Luan
 Vint Lee
 
 UR5 Guide: https://docs.google.com/document/d/1LiBr485hCvnpTVi90FoljeGexzEYnljqE2dXsjd6uik/edit#heading=h.kc2ws2ma7twt
+Robotiq Source Repo: https://github.com/TAMS-Group/robotiq
 
 TODO
 
