@@ -32,6 +32,7 @@ roslaunch ur5_moveit_config moveit_planning_execution.launch
 roslaunch ur5_moveit_config moveit_rviz.launch
 
 roslaunch realsense2_camera rs_camera.launch mode:=Manual color_width:=424 color_height:=240 depth_width:=424 depth_height:=240 align_depth:=true depth_fps:=6 color_fps:=6
+
 roslaunch lab4_cam ar_track.launch
 
 rosrun movement ar_to_base_transform.py
