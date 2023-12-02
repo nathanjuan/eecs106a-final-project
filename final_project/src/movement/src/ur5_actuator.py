@@ -336,12 +336,14 @@ class UR5_Manipulator(object):
         ## Adding Objects to the Planning Scene
         ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         ## First, we will create a box in the planning scene between the fingers:
+        width = 0.05
         box_pose = geometry_msgs.msg.PoseStamped()
-        box_pose.header.frame_id = "panda_hand"
+        box_pose.header.frame_id = "base_link"
+        box_pose.pose.position.z = -width/2
         box_pose.pose.orientation.w = 1.0
-        box_pose.pose.position.z = 0.11  # above the panda_hand frame
+        # box_pose.pose.position.z = 0.11  # above the panda_hand frame
         box_name = "box"
-        scene.add_box(box_name, box_pose, size=(0.075, 0.075, 0.075))
+        scene.add_box(box_name, box_pose, size=(2, 3, width))
 
         ## END_SUB_TUTORIAL
         # Copy local variables back to class variables. In practice, you should use the class
@@ -509,6 +511,10 @@ def test():
 
 def executor():
     ur5 = UR5_Manipulator()
+    ur5.add_box()
+
+
+
     # ur5.robot.set_
     ur5.activate_gripper()
     
