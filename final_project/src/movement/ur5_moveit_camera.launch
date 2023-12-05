@@ -27,4 +27,8 @@
 
   <!-- Run ar_to_base_transform.py for AR tag to base transform -->
   <node name="ar_to_base_transform" pkg="movement" type="ar_to_base_transform.py" output="screen"/>
+
+  <!-- Run object_detector.py to detect blocks -->
+  <node name="object_detector" pkg="perception" type="object_detector.py" output="screen"/>
+
 </launch>
