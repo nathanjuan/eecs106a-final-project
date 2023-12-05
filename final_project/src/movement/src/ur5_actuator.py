@@ -34,6 +34,8 @@ from robotiq_2f_gripper_control.msg import _Robotiq2FGripper_robot_input as robo
 from visualization_msgs.msg import Marker, MarkerArray
 
 
+from visualization_msgs.msg import Marker, MarkerArray
+
 ## END_SUB_TUTORIAL
 
 
@@ -73,8 +75,6 @@ class UR5_Manipulator(object):
     def __init__(self):
         super(UR5_Manipulator, self).__init__()
 
-        ## BEGIN setup
-        ##
         ## First initialize `moveit_commander`_ and a `rospy`_ node:
         moveit_commander.roscpp_initialize(sys.argv)
         rospy.init_node("ur5_manipulator", anonymous=True)
@@ -103,16 +103,8 @@ class UR5_Manipulator(object):
             queue_size=20,
         )
 
-        self.block_positions = rospy.Subscriber("/marker_array_topic", MarkerArray, self.get_block_positions)
-
-
-        ## END_SUB_TUTORIAL
-
-        ## BEGIN_SUB_TUTORIAL basic_info
-        ##
-        ## Getting Basic Information
-        ## ^^^^^^^^^^^^^^^^^^^^^^^^^
-        # We can get the name of the reference frame for this robot:
+       
+        # reference frame for this robot:
         planning_frame = move_group.get_planning_frame()
         print("============ Planning frame: %s" % planning_frame)
 
@@ -122,14 +114,13 @@ class UR5_Manipulator(object):
 
         # We can get a list of all the groups in the robot:
         group_names = robot.get_group_names()
-        print("============ Available Planning Groups:", robot.get_group_names())
+        # print("============ Available Planning Groups:", robot.get_group_names())
 
         # Sometimes for debugging it is useful to print the entire state of the
         # robot:
         print("============ Printing robot state")
         print(robot.get_current_state())
         print("")
-        ## END_SUB_TUTORIAL
 
         # Misc variables
         self.box_name = ""
@@ -146,9 +137,8 @@ class UR5_Manipulator(object):
             "Robotiq2FGripperRobotOutput", robotiq_outputMsg.Robotiq2FGripper_robot_output, queue_size=10)
         self.robotiq_gripper_sub = rospy.Subscriber(
             "Robotiq2FGripperRobotInput", robotiq_inputMsg.Robotiq2FGripper_robot_input, self.gripper_status_callback)
-
-    def get_block_positions(self, msg): 
-        print("block positions:", msg)
+        ### Camera subscriber init ###
+        self.block_list_sub = rospy.Subscriber('/marker_array_topic', MarkerArray, self.block_list_callback)
 
     def go_to_joint_state(self, joint_goal):
 
@@ -333,30 +323,17 @@ class UR5_Manipulator(object):
         ## END_SUB_TUTORIAL
 
     def add_box(self, timeout=4):
-        # Copy class variables to local variables to make the web tutorials more clear.
-        # In practice, you should use the class variables directly unless you have a good
-        # reason not to.
-        box_name = self.box_name
-        scene = self.scene
-
-        ## BEGIN_SUB_TUTORIAL add_box
-        ##
-        ## Adding Objects to the Planning Scene
-        ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        ## First, we will create a box in the planning scene between the fingers:
+        #add a table to avoide collisions
         width = 0.05
         box_pose = geometry_msgs.msg.PoseStamped()
         box_pose.header.frame_id = "base_link"
         box_pose.pose.position.z = -width/2
         box_pose.pose.orientation.w = 1.0
         # box_pose.pose.position.z = 0.11  # above the panda_hand frame
-        box_name = "box"
-        scene.add_box(box_name, box_pose, size=(2, 3, width))
+        self.box_name = "table"
+        self.scene.add_box(self.box_name, box_pose, size=(2, 3, width))
 
-        ## END_SUB_TUTORIAL
-        # Copy local variables back to class variables. In practice, you should use the class
-        # variables directly unless you have a good reason not to.
-        self.box_name = box_name
+        
         return self.wait_for_state_update(box_is_known=True, timeout=timeout)
 
     def attach_box(self, timeout=4):
@@ -458,7 +435,11 @@ class UR5_Manipulator(object):
         self.send_gripper_commad(rPR=255)
         #TODO wait till gripper stops
 
-
+    def block_list_callback(self, msg):
+        self.block_list = msg
+    def get_block_list(self):
+        
+        marker_array_topic
 def test():
     try:
         print("")
@@ -618,7 +599,20 @@ def executor():
 
     #repeat until all blocks in goal
 
+def sort_blocks():
+    try:
+        ur5 = UR5_Manipulator()
+        ur5.add_box()
+        ur5.activate_gripper()
 
+        input("Press `Enter` to start sorting")
+        ur5.open_gripper()
+        #get list of block locations
+        #move to a block
+    except rospy.ROSInterruptException:
+        return
+    except KeyboardInterrupt:
+        return
 if __name__ == "__main__":
 
     executor()

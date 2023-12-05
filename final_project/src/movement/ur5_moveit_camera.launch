@@ -1,0 +1,34 @@
+<launch>
+  <!-- Set the robot IP address as an argument -->
+  <arg name="robot_ip" default="172.22.22.2"/>
+
+  <!-- Launch the ur_robot_driver with the specified robot IP -->
+  <include file="$(find ur_robot_driver)/launch/ur5_bringup.launch">
+    <arg name="robot_ip" value="$(arg robot_ip)"/>
+  </include>
+
+  <!-- Launch moveit_planning_execution.launch from ur5_moveit_config package -->
+  <include file="$(find ur5_moveit_config)/launch/moveit_planning_execution.launch"/>
+
+  <!-- Run Robotiq2FGripperRtuNode.py for the Robotiq 2F gripper -->
+  <node name="robotiq_gripper" pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" output="screen">
+    <param name="port" value="/dev/ttyUSB0"/>
+  </node>
+
+  <!-- Launch moveit_rviz.launch from ur5_moveit_config package -->
+  <include file="$(find ur5_moveit_config)/launch/moveit_rviz.launch"/>
+
+  <!-- Launch RealSense camera -->
+  <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+  </include>
+
+  <!-- Launch AR tag detection -->
+  <include file="$(find lab4_cam)/launch/ar_track.launch"/>
+
+  <!-- Run ar_to_base_transform.py for AR tag to base transform -->
+  <node name="ar_to_base_transform" pkg="movement" type="ar_to_base_transform.py" output="screen"/>
+
+  <!-- Run object_detector.py to detect blocks -->
+  <node name="object_detector" pkg="perception" type="object_detector.py" output="screen"/>
+
+</launch>
