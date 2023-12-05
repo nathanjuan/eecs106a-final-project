@@ -17,6 +17,7 @@ import moveit_commander
 import moveit_msgs.msg
 import geometry_msgs.msg
 
+
 try:
     from math import pi, dist, fabs, cos
 except:  # For Python 2 compatibility
@@ -30,6 +31,8 @@ from std_msgs.msg import String
 from moveit_commander.conversions import pose_to_list
 from robotiq_2f_gripper_control.msg import _Robotiq2FGripper_robot_output as robotiq_outputMsg
 from robotiq_2f_gripper_control.msg import _Robotiq2FGripper_robot_input as robotiq_inputMsg
+from visualization_msgs.msg import Marker, MarkerArray
+
 
 ## END_SUB_TUTORIAL
 
@@ -100,6 +103,9 @@ class UR5_Manipulator(object):
             queue_size=20,
         )
 
+        self.block_positions = rospy.Subscriber("/marker_array_topic", MarkerArray, self.get_block_positions)
+
+
         ## END_SUB_TUTORIAL
 
         ## BEGIN_SUB_TUTORIAL basic_info
@@ -141,6 +147,8 @@ class UR5_Manipulator(object):
         self.robotiq_gripper_sub = rospy.Subscriber(
             "Robotiq2FGripperRobotInput", robotiq_inputMsg.Robotiq2FGripper_robot_input, self.gripper_status_callback)
 
+    def get_block_positions(self, msg): 
+        print("block positions:", msg)
 
     def go_to_joint_state(self, joint_goal):
 
@@ -609,6 +617,7 @@ def executor():
     gripper_command.rFR = 64 # 1/4 max force
 
     #repeat until all blocks in goal
+
 
 if __name__ == "__main__":
 

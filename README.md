@@ -25,7 +25,9 @@ make script that can
 
 roslaunch ur_robot_driver ur5_bringup.launch robot_ip:=172.22.22.2
 
-roslaunch ur5_moveit_config moveit_planning_execution.launch
+or roslaunch ur_gazebo ur5_bringup.launch
+
+roslaunch ur5_moveit_config moveit_planning_execution.launch (sim:=true)
 
 *ROSLAUNCH for gripper**
 

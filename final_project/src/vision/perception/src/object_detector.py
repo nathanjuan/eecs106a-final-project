@@ -98,7 +98,7 @@ class ObjectDetector:
         marker.action = Marker.ADD
         marker.pose.position.x = point_base.point.x
         marker.pose.position.y = point_base.point.y
-        marker.pose.position.z = 0.060325 / 2
+        marker.pose.position.z = 0.060325 / 2 #
         marker.pose.orientation.x = 0.0
         marker.pose.orientation.y = 0.0
         marker.pose.orientation.z = 0.0
