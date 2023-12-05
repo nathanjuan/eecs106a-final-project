@@ -24,10 +24,12 @@ make script that can
         we mostly figured this out
 
 roslaunch ur_robot_driver ur5_bringup.launch robot_ip:=172.22.22.2
+OR
+roslaunch ur_gazebo ur5_bringup.launch
 
-roslaunch ur5_moveit_config moveit_planning_execution.launch
+roslaunch ur5_moveit_config moveit_planning_execution.launch sim:=true
 
-*ROSLAUNCH for gripper**
+rosrun robotiq_2f_gripper_control Robotiq2FGripperRtuNode.py /dev/ttyUSB0
 
 roslaunch ur5_moveit_config moveit_rviz.launch
 
@@ -36,3 +38,5 @@ roslaunch realsense2_camera rs_camera.launch mode:=Manual color_width:=424 color
 roslaunch lab4_cam ar_track.launch
 
 rosrun movement ar_to_base_transform.py
+
+rosrun perception object_detector.py
