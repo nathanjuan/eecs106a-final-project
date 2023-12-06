@@ -13,7 +13,6 @@ import tf
 from geometry_msgs.msg import Point, PointStamped
 from visualization_msgs.msg import Marker, MarkerArray
 from std_msgs.msg import Header
-from sklearn import metrics
 from sklearn.cluster import KMeans
 
 
@@ -44,6 +43,7 @@ class ObjectDetector:
         self.point_pub = rospy.Publisher("goal_point", Point, queue_size=10)
         self.image_pub = rospy.Publisher('detected_cup', Image, queue_size=10)
         self.marker_pub = rospy.Publisher('marker_array_topic', MarkerArray, queue_size=1)
+        self.goal_mask_pub = rospy.Publisher('goal_mask', Image, queue_size=10)
 
 
         rospy.spin()
@@ -172,6 +172,10 @@ class ObjectDetector:
             # TODO: Threshold the image to get only cup colors
             # HINT: Lookup np.where() or cv2.inRange()
             mask = cv2.inRange(hsv, lower_hsv, upper_hsv)
+            if color == 'b':
+                mask_img = self.bridge.cv2_to_imgmsg(mask, "mono8")
+                # print(ros_image)
+                self.goal_mask_pub.publish(mask_img)
             #np.where(hsv > .1 and hsv < 0.3, 1, 0)
 
             # TODO: Get the coordinates of the cup points on the mask

@@ -32,6 +32,7 @@ from moveit_commander.conversions import pose_to_list
 from robotiq_2f_gripper_control.msg import _Robotiq2FGripper_robot_output as robotiq_outputMsg
 from robotiq_2f_gripper_control.msg import _Robotiq2FGripper_robot_input as robotiq_inputMsg
 from visualization_msgs.msg import Marker, MarkerArray
+from sensor_msgs.msg import Image
 
 
 from visualization_msgs.msg import Marker, MarkerArray
@@ -139,6 +140,8 @@ class UR5_Manipulator(object):
             "Robotiq2FGripperRobotInput", robotiq_inputMsg.Robotiq2FGripper_robot_input, self.gripper_status_callback)
         ### Camera subscriber init ###
         self.block_list_sub = rospy.Subscriber('/marker_array_topic', MarkerArray, self.block_list_callback)
+
+        self.goal_mask_sub = rospy.Subscriber('/goal_mask', Image, self.goal_mask_callback)
 
     def go_to_joint_state(self, joint_goal):
 
@@ -466,6 +469,9 @@ class UR5_Manipulator(object):
     #     sampled_block_list[i].pose.position.x = self.block_list[i].pose.position.x/num_samples
     #     sampled_block_list[i].pose.position.y = self.block_list[i].pose.position.y/num_samples
     #     return sampled_block_list
+
+    def goal_list_callback(self, msg):
+        self.goal_mask = msg
             
 def test():
     try:
@@ -654,6 +660,7 @@ def rgb_to_char(color):
         return 'b'
     if color.g == 1:
         return 'g'
+
 def sort_blocks():
     try:
         ur5 = UR5_Manipulator()
@@ -702,12 +709,12 @@ def sort_blocks():
                 input("Press `Enter` to pickup block")
                 pose_goal.position.z = marker.pose.position.z + 0.29 
                 ur5.go_to_pose_goal(pose_goal)
-                rospy.sleep(3)
+                rospy.sleep(1)
                 ur5.close_gripper()
-                rospy.sleep(3)
+                rospy.sleep(1)
                 pose_goal.position.z = marker.pose.position.z + 0.29  + 0.05
                 ur5.go_to_pose_goal(pose_goal)
-                rospy.sleep(3)
+                rospy.sleep(1)
 
                 input("Press `Enter` to move to goal")
                 pose_goal.orientation.x = 1.0
@@ -715,12 +722,12 @@ def sort_blocks():
                 pose_goal.position.y = goal_states[0]['y'] #+ 0.005
                 pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
                 ur5.go_to_pose_goal(pose_goal)
-                rospy.sleep(4)
+                rospy.sleep(1)
                 pose_goal.position.z = marker.pose.position.z + 0.29 + 0.005
                 ur5.go_to_pose_goal(pose_goal)
-                rospy.sleep(3)
+                rospy.sleep(1)
                 ur5.open_gripper()
-                rospy.sleep(3)
+                rospy.sleep(1)
                 pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
                 ur5.go_to_pose_goal(pose_goal)
 
@@ -749,7 +756,7 @@ def sort_blocks():
 
             if marker.color.r == 1:
                 pose_goal.position.x = marker.pose.position.x + 0.03
-            else:
+            else: 
                  pose_goal.position.x = marker.pose.position.x - 0.03
 
             ur5.go_to_pose_goal(pose_goal)
