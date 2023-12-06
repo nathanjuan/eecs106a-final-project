@@ -98,25 +98,36 @@ class ObjectDetector:
         marker.header.frame_id = "base_link"
         marker.header.stamp = rospy.Time.now()
         marker.id = i
-        marker.type = Marker.CUBE
         marker.action = Marker.ADD
         marker.pose.position.x = point_base.point.x
         marker.pose.position.y = point_base.point.y
-        marker.pose.position.z = 0.060325 / 2 #
-        marker.pose.orientation.x = 0.0
-        marker.pose.orientation.y = 0.0
-        marker.pose.orientation.z = 0.0
-        marker.pose.orientation.w = 1.0
-        marker.scale.x = 0.028575
-        marker.scale.y = 0.028575
-        marker.scale.z = 0.060325
-        marker.color.a = 1.0  # Alpha must be non-zero
-        if color == 'r':
-            marker.color.r = 1
-        elif color == 'g':
-            marker.color.g = 1
-        elif color == 'b':
+        if color == 'b':
+            marker.type = Marker.CYLINDER
             marker.color.b = 1
+            marker.pose.position.z = 0.005 / 2 #
+            marker.pose.orientation.x = 0.0
+            marker.pose.orientation.y = 0.0
+            marker.pose.orientation.z = 0.0
+            marker.pose.orientation.w = 1.0
+            marker.scale.x = 0.124
+            marker.scale.y = 0.124
+            marker.scale.z = 0.005
+            marker.color.a = 1.0  # Alpha must be non-zero
+        elif color == 'r' or color == 'g':
+            marker.type = Marker.CUBE
+            marker.pose.position.z = 0.060325 / 2 #
+            marker.pose.orientation.x = 0.0
+            marker.pose.orientation.y = 0.0
+            marker.pose.orientation.z = 0.0
+            marker.pose.orientation.w = 1.0
+            marker.scale.x = 0.028575
+            marker.scale.y = 0.028575
+            marker.scale.z = 0.060325
+            marker.color.a = 1.0  # Alpha must be non-zero
+            if color == 'r':
+                marker.color.r = 1
+            elif color == 'g':
+                marker.color.g = 1
         
         return marker
         
@@ -151,6 +162,7 @@ class ObjectDetector:
         bounds = dict()
         bounds['r'] = (np.array([-10, 140, 140]), np.array([10, 255, 255]))
         bounds['g'] = (np.array([20, 90, 90]), np.array([50, 255, 255]))
+        bounds['b'] = (np.array([195, 90, 90]), np.array([225, 255, 255])) #need to test
         num_blocks = 0
         marker_array = MarkerArray()
 
