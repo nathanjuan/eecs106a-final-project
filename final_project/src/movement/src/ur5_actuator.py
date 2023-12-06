@@ -444,7 +444,7 @@ class UR5_Manipulator(object):
     
     def close_gripper(self):
         #if gripper.status.rACT == 0: give warining to activate
-        self.send_gripper_commad(rPR=255, rFR=32)
+        self.send_gripper_commad(rPR=255, rFR=16)
         #TODO wait till gripper stops
 
     def block_list_callback(self, msg):
@@ -634,14 +634,14 @@ def sort_blocks():
                     block_counts[color] = 1
         
         #count blocks already on each goal
-        def add_block_to_goal(color, goal_i):
-            for marker in ur5.block_list.markers:
+        def add_block_to_goal(color, goal_i, marker_list):
+            for marker in marker_list:
                 if rgb_to_char(marker.color) == color and (marker.pose.position.x - goal_states[goal_i]['x'])**2 + (marker.pose.position.y - goal_states[goal_i]['x'])**2 > 0.006**2:
                     pose_goal = geometry_msgs.msg.Pose()
                     goal_block_count = goal_states[goal_i]['r'] + goal_states[goal_i]['g']
                     pose_goal.position.x = goal_states[goal_i]['x'] 
                     pose_goal.position.y = goal_states[goal_i]['y'] - 0.05 + (goal_block_count )*0.025
-                    pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05 #hardcode possibly
+                    pose_goal.position.z = marker.pose.position.z #hardcode possibly
                     move_block(marker.pose, pose_goal)
 
                     if color in goal_states[goal_i].keys(): 
@@ -676,14 +676,13 @@ def sort_blocks():
             ur5.go_to_pose_goal(pose_goal)
 
             input("Press `Enter` to pickup block")
-            pose_goal.position.z = pose_a.position.z + 0.29 + 0.005
+            pose_goal.position.z = pose_a.position.z + 0.29 
             ur5.go_to_pose_goal(pose_goal)
-            rospy.sleep(3)
+            rospy.sleep(2)
             ur5.close_gripper()
-            rospy.sleep(1.5)
+            rospy.sleep(1.1)
             pose_goal.position.z = pose_a.position.z + 0.29  + 0.06
             ur5.go_to_pose_goal(pose_goal)
-            rospy.sleep(1.5)
 
             input("Press `Enter` to move to goal")
             pose_goal.orientation.x = 1.0
@@ -724,8 +723,10 @@ def sort_blocks():
         #if not positive, try new configuration
 
         #move to a block
-        for marker in ur5.block_list.markers:
-            add_block_to_goal(rgb_to_char(marker.color), 0)
+        markers = copy.deepcopy(ur5.block_list.markers)
+        for marker in markers:
+            print(marker)
+            add_block_to_goal(rgb_to_char(marker.color), 0, markers)
 
             # pose_goal = geometry_msgs.msg.Pose()
             # pose_goal.orientation.x = 1.0
