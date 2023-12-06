@@ -467,65 +467,8 @@ class UR5_Manipulator(object):
     #     sampled_block_list[i].pose.position.y = self.block_list[i].pose.position.y/num_samples
     #     return sampled_block_list
             
+
 def test():
-    try:
-        print("")
-        print("----------------------------------------------------------")
-        print("Welcome to the MoveIt MoveGroup Python Interface Tutorial")
-        print("----------------------------------------------------------")
-        print("Press Ctrl-D to exit at any time")
-        print("")
-        input(
-            "============ Press `Enter` to begin the tutorial by setting up the moveit_commander ..."
-        )
-        tutorial = UR5_Manipulator()
-
-        input(
-            "============ Press `Enter` to execute a movement using a joint state goal ..."
-        )
-        tutorial.go_to_joint_state()
-
-        input("============ Press `Enter` to execute a movement using a pose goal ...")
-        tutorial.go_to_pose_goal()
-
-        input("============ Press `Enter` to plan and display a Cartesian path ...")
-        cartesian_plan, fraction = tutorial.plan_cartesian_path()
-
-        input(
-            "============ Press `Enter` to display a saved trajectory (this will replay the Cartesian path)  ..."
-        )
-        tutorial.display_trajectory(cartesian_plan)
-
-        input("============ Press `Enter` to execute a saved path ...")
-        tutorial.execute_plan(cartesian_plan)
-
-        input("============ Press `Enter` to add a box to the planning scene ...")
-        tutorial.add_box()
-
-        input("============ Press `Enter` to attach a Box to the Panda robot ...")
-        tutorial.attach_box()
-
-        input(
-            "============ Press `Enter` to plan and execute a path with an attached collision object ..."
-        )
-        cartesian_plan, fraction = tutorial.plan_cartesian_path(scale=-1)
-        tutorial.execute_plan(cartesian_plan)
-
-        input("============ Press `Enter` to detach the box from the Panda robot ...")
-        tutorial.detach_box()
-
-        input(
-            "============ Press `Enter` to remove the box from the planning scene ..."
-        )
-        tutorial.remove_box()
-
-        print("============ Python tutorial demo complete!")
-    except rospy.ROSInterruptException:
-        return
-    except KeyboardInterrupt:
-        return
-
-def executor():
     ur5 = UR5_Manipulator()
     ur5.add_box()
 
@@ -675,54 +618,106 @@ def sort_blocks():
 
         block_list = ur5.block_list.markers #self.block_list
         
+        total_blocks = 0
         block_counts = dict()
-        goal_states = [] #[position x, position y, ]
+        goal_states = [] 
         for marker in ur5.block_list.markers:
             color = rgb_to_char(marker.color)
             if color == 'b':
-                goal_states.append({'x':marker.pose.position.x, 'y':marker.pose.position.y})
-            elif color in block_counts.keys(): 
-                block_counts[color] += 1
+                goal_states.append({'x':marker.pose.position.x, 'y':marker.pose.position.y,
+                                    'r':0, 'g':0})
             else:
-                block_counts[color] = 1
+                total_blocks += 1
+                if color in block_counts.keys(): 
+                    block_counts[color] += 1
+                else:
+                    block_counts[color] = 1
         
         #count blocks already on each goal
-        
-        #add a block of color x to a goal
-        for marker in ur5.block_list.markers:
-            if not marker.color == 'r' and (marker.pose.position.x - goal_states[0]['x'])**2 + (marker.pose.position.y - goal_states[0]['x'])**2 > 0.006**2:
-                #go above block
-                input("Press `Enter` to go above block")
-                pose_goal = geometry_msgs.msg.Pose()
-                pose_goal.orientation.x = 1.0
-                pose_goal.position.x = marker.pose.position.x
-                pose_goal.position.y = marker.pose.position.y + 0.005
-                pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
-                ur5.go_to_pose_goal(pose_goal)
-                input("Press `Enter` to pickup block")
-                pose_goal.position.z = marker.pose.position.z + 0.29 
-                ur5.go_to_pose_goal(pose_goal)
-                rospy.sleep(3)
-                ur5.close_gripper()
-                rospy.sleep(3)
-                pose_goal.position.z = marker.pose.position.z + 0.29  + 0.05
-                ur5.go_to_pose_goal(pose_goal)
-                rospy.sleep(3)
+        def add_block_to_goal(color, goal_i):
+            for marker in ur5.block_list.markers:
+                if rgb_to_char(marker.color) == color and (marker.pose.position.x - goal_states[goal_i]['x'])**2 + (marker.pose.position.y - goal_states[goal_i]['x'])**2 > 0.006**2:
+                    pose_goal = geometry_msgs.msg.Pose()
+                    goal_block_count = goal_states[goal_i]['r'] + goal_states[goal_i]['g']
+                    pose_goal.position.x = goal_states[goal_i]['x'] - 0.03 + (goal_block_count % 2)*0.03
+                    pose_goal.position.y = goal_states[goal_i]['y'] - 0.03 + (goal_block_count / 2)*0.03
+                    pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05 #hardcode possibly
+                    move_block(marker.pose, pose_goal)
 
-                input("Press `Enter` to move to goal")
-                pose_goal.orientation.x = 1.0
-                pose_goal.position.x = goal_states[0]['x']
-                pose_goal.position.y = goal_states[0]['y'] #+ 0.005
-                pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
-                ur5.go_to_pose_goal(pose_goal)
-                rospy.sleep(4)
-                pose_goal.position.z = marker.pose.position.z + 0.29 + 0.005
-                ur5.go_to_pose_goal(pose_goal)
-                rospy.sleep(3)
-                ur5.open_gripper()
-                rospy.sleep(3)
-                pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
-                ur5.go_to_pose_goal(pose_goal)
+                    if color in goal_states[goal_i].keys(): 
+                        goal_states[goal_i][color] += 1
+
+        def from_goal_to_goal(color, goal_a, goal_b):
+            for marker in ur5.block_list.markers:
+                if rgb_to_char(marker.color) == color and (marker.pose.position.x - goal_states[goal_a]['x'])**2 + (marker.pose.position.y - goal_states[goal_b]['x'])**2 < 0.006**2:
+                    pose_goal = geometry_msgs.msg.Pose()
+                    pose_goal.position.x = goal_states[goal_b]['x']
+                    pose_goal.position.y = goal_states[goal_b]['y']
+                    pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05 #hardcode possibly
+                    move_block(marker.pose, pose_goal)
+
+        def remove_block_from_goal(color, goal_i):
+            for marker in ur5.block_list.markers:
+                if rgb_to_char(marker.color) == color and (marker.pose.position.x - goal_states[goal_i]['x'])**2 + (marker.pose.position.y - goal_states[goal_i]['x'])**2 < 0.006**2:
+                    pose_goal = geometry_msgs.msg.Pose()
+                    pose_goal.position.x = marker.pose.position.x
+                    pose_goal.position.y = marker.pose.position.y - 0.08
+                    pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05 #hardcode possibly
+                    move_block(marker.pose, pose_goal)
+        
+        def move_block(pose_a, pose_b):
+            pose_goal = geometry_msgs.msg.Pose()
+                        
+            input("Press `Enter` to go above block")
+            pose_goal.orientation.x = 1.0
+            pose_goal.position.x = pose_a.position.x
+            pose_goal.position.y = pose_a.position.y + 0.005
+            pose_goal.position.z = pose_a.position.z + 0.29 + 0.05
+            ur5.go_to_pose_goal(pose_goal)
+
+            input("Press `Enter` to pickup block")
+            pose_goal.position.z = pose_a.position.z + 0.29 + 0.005
+            ur5.go_to_pose_goal(pose_goal)
+            rospy.sleep(3)
+            ur5.close_gripper()
+            rospy.sleep(1.5)
+            pose_goal.position.z = pose_a.position.z + 0.29  + 0.06
+            ur5.go_to_pose_goal(pose_goal)
+            rospy.sleep(1.5)
+
+            input("Press `Enter` to move to goal")
+            pose_goal.orientation.x = 1.0
+            pose_goal.position.x = pose_b.position.x
+            pose_goal.position.y = pose_b.position.y #+ 0.005
+            pose_goal.position.z = pose_b.position.z + 0.29 + 0.06
+            ur5.go_to_pose_goal(pose_goal)
+            rospy.sleep(4)
+            pose_goal.position.z = pose_b.position.z + 0.29 + 0.005
+            ur5.go_to_pose_goal(pose_goal)
+            rospy.sleep(1.5)
+            ur5.open_gripper()
+            rospy.sleep(1.5)
+            pose_goal.position.z = pose_b.position.z + 0.29 + 0.05
+            ur5.go_to_pose_goal(pose_goal)
+            rospy.sleep(0.5)
+            ur5.tuck()
+
+        #add a block of color x to a goal
+        # score = 0 #assume all blocks are not on goals
+        # while score < total_blocks:
+        #     for color in ['r', 'g']:
+        #         add_block_to_goal(color, 0)
+        #         add_block_to_goal(color, 0)
+        #         add_block_to_goal(color, 0)
+        #         add_block_to_goal(color, 0)
+        #         put_in = input('does this block belong here? (y/n)')
+        #         if put_in == 'y':
+        #             continue
+        #         elif put_in == 'n':
+        #             remove_block_from_goal(color, 0)
+
+
+
 
         #check score (human input)
         #if positive, loop
@@ -730,41 +725,43 @@ def sort_blocks():
 
         #move to a block
         for marker in ur5.block_list.markers:
-            pose_goal = geometry_msgs.msg.Pose()
-            pose_goal.orientation.x = 1.0
-            pose_goal.position.x = marker.pose.position.x
-            pose_goal.position.y = marker.pose.position.y + 0.005
-            pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
-            ur5.go_to_pose_goal(pose_goal)
-            input("Press `Enter` to continue")
-            pose_goal.position.z = marker.pose.position.z + 0.29 #0.3048
-            ur5.go_to_pose_goal(pose_goal)
-            rospy.sleep(5)
-            ur5.close_gripper()
-            rospy.sleep(5)
+            add_block_to_goal(rgb_to_char(marker.color), 0)
 
-            pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
-            ur5.go_to_pose_goal(pose_goal)
-            rospy.sleep(5)
+            # pose_goal = geometry_msgs.msg.Pose()
+            # pose_goal.orientation.x = 1.0
+            # pose_goal.position.x = marker.pose.position.x
+            # pose_goal.position.y = marker.pose.position.y + 0.005
+            # pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
+            # ur5.go_to_pose_goal(pose_goal)
+            # input("Press `Enter` to continue")
+            # pose_goal.position.z = marker.pose.position.z + 0.29 #0.3048
+            # ur5.go_to_pose_goal(pose_goal)
+            # rospy.sleep(5)
+            # ur5.close_gripper()
+            # rospy.sleep(5)
 
-            if marker.color.r == 1:
-                pose_goal.position.x = marker.pose.position.x + 0.03
-            else:
-                 pose_goal.position.x = marker.pose.position.x - 0.03
+            # pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
+            # ur5.go_to_pose_goal(pose_goal)
+            # rospy.sleep(5)
 
-            ur5.go_to_pose_goal(pose_goal)
-            rospy.sleep(5)
+            # if marker.color.r == 1:
+            #     pose_goal.position.x = marker.pose.position.x + 0.03
+            # else:
+            #      pose_goal.position.x = marker.pose.position.x - 0.03
 
-            pose_goal.position.z = marker.pose.position.z + 0.29 
-            ur5.go_to_pose_goal(pose_goal)
-            rospy.sleep(5)
+            # ur5.go_to_pose_goal(pose_goal)
+            # rospy.sleep(5)
 
-            ur5.open_gripper()
-            rospy.sleep(5)
+            # pose_goal.position.z = marker.pose.position.z + 0.29 
+            # ur5.go_to_pose_goal(pose_goal)
+            # rospy.sleep(5)
+
+            # ur5.open_gripper()
+            # rospy.sleep(5)
             
 
-            pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
-            ur5.go_to_pose_goal(pose_goal)
+            # pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
+            # ur5.go_to_pose_goal(pose_goal)
 
 
 
