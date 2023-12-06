@@ -168,6 +168,17 @@ class UR5_Manipulator(object):
         current_joints = self.move_group.get_current_joint_values()
         return all_close(joint_goal, current_joints, 0.01)
 
+    def tuck(self):
+        joint_goal = self.move_group.get_current_joint_values()
+        joint_goal[0] = -pi/2
+        joint_goal[1] = -pi/3
+        joint_goal[2] = -2*pi/3
+        joint_goal[3] = 4.53 #260 degrees
+        joint_goal[4] = pi/2
+        joint_goal[5] = 0
+
+        self.go_to_joint_state(joint_goal)
+
     def go_to_pose_goal(self, pose_goal):        
         """moves ur5 to target pose"""
         
@@ -437,9 +448,24 @@ class UR5_Manipulator(object):
 
     def block_list_callback(self, msg):
         self.block_list = msg
-    def get_block_list(self):
+    # def get_block_list(self, duration = 5.0):
+
+    #     start_time = rospy.Time.now()
+    #     loop_duration = rospy.Duration(duration)  # 5 seconds duration
+    #     start_time = rospy.Time.now()  # Getting the current time
+
+    #     sampled_block_list = self.block_list.markers
+    #     num_samples = 0
+    #     while rospy.Time.now() < start_time + loop_duration:
+    #         for i in range(len(sampled_block_list)):
+    #             sampled_block_list[i].pose.position.x += self.block_list[i].pose.position.x
+    #             sampled_block_list[i].pose.position.y += self.block_list[i].pose.position.y
+    #         num_samples += 1
         
-        marker_array_topic
+    #     sampled_block_list[i].pose.position.x = self.block_list[i].pose.position.x/num_samples
+    #     sampled_block_list[i].pose.position.y = self.block_list[i].pose.position.y/num_samples
+    #     return sampled_block_list
+            
 def test():
     try:
         print("")
@@ -605,9 +631,35 @@ def sort_blocks():
         ur5.add_box()
         ur5.activate_gripper()
 
+        input("Press `Enter` to tuck")
+        ur5.tuck()
+
         input("Press `Enter` to start sorting")
         ur5.open_gripper()
         #get list of block locations
+        block_list = ur5.block_list.markers #self.block_list
+        
+        
+        #move to a block
+        for marker in ur5.block_list.markers:
+            pose_goal = geometry_msgs.msg.Pose()
+            pose_goal.orientation.x = 1.0
+            pose_goal.position.x = marker.pose.position.x
+            pose_goal.position.y = marker.pose.position.y
+            pose_goal.position.z = marker.pose.position.z + 0.3048 + .15
+            ur5.go_to_pose_goal(pose_goal)
+            
+            pose_goal.position.z = marker.pose.position.z + 0.3048
+            ur5.go_to_pose_goal(pose_goal)
+            break
+        #pick up block
+        input("Press `Enter` to close gripper")
+        ur5.close_gripper()
+        #move to goal
+
+        #check score
+
+
         #move to a block
     except rospy.ROSInterruptException:
         return
@@ -615,4 +667,4 @@ def sort_blocks():
         return
 if __name__ == "__main__":
 
-    executor()
+    sort_blocks()

@@ -50,6 +50,7 @@ class ObjectDetector:
 
     def camera_info_callback(self, msg):
         # TODO: Extract the intrinsic parameters from the CameraInfo message
+        # print("got cam nfo")
         self.fx = msg.K[0]
         self.fy = msg.K[4]
         self.cx = msg.K[2]
@@ -63,6 +64,7 @@ class ObjectDetector:
         return X, Y, Z
 
     def color_image_callback(self, msg):
+        # print("color img")
         try:
             # Convert the ROS Image message to an OpenCV image (BGR8 format)
             self.cv_color_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
@@ -75,6 +77,7 @@ class ObjectDetector:
             print("Error:", e)
 
     def depth_image_callback(self, msg):
+        # print("depth image")
         try:
             # Convert the ROS Image message to an OpenCV image (16UC1 format)
             self.cv_depth_image = self.bridge.imgmsg_to_cv2(msg, "16UC1")
@@ -128,6 +131,7 @@ class ObjectDetector:
 
 
     def process_images(self):
+        # print("got image")
         # Convert the color image to HSV color space
         hsv = cv2.cvtColor(self.cv_color_image, cv2.COLOR_BGR2HSV)
         # TODO: Define range for cup color in HSV
@@ -215,5 +219,5 @@ class ObjectDetector:
 
 
 if __name__ == '__main__':
-
+    # print("ran script")
     ObjectDetector()

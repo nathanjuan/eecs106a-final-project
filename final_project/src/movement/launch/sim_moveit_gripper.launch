@@ -1,0 +1,19 @@
+<!-- ur5_moveit_camera_sim.launch -->
+<launch>
+  <!-- Launch UR Gazebo simulation -->
+  <include file="$(find ur_gazebo)/launch/ur5_bringup.launch"/>
+
+  <!-- Launch MoveIt planning execution with simulation mode -->
+  <include file="$(find ur5_moveit_config)/launch/moveit_planning_execution.launch">
+    <arg name="sim" value="true"/>
+  </include>
+
+  <!-- Run Robotiq2FGripperRtuNode.py for the Robotiq 2F gripper -->
+  <node name="robotiq_gripper" pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" output="screen">
+    <param name="port" value="/dev/ttyUSB0"/>
+  </node>
+
+  <!-- Launch MoveIt RViz interface -->
+  <include file="$(find ur5_moveit_config)/launch/moveit_rviz.launch"/>
+
+</launch>
