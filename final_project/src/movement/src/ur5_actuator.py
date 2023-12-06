@@ -639,8 +639,8 @@ def sort_blocks():
                 if rgb_to_char(marker.color) == color and (marker.pose.position.x - goal_states[goal_i]['x'])**2 + (marker.pose.position.y - goal_states[goal_i]['x'])**2 > 0.006**2:
                     pose_goal = geometry_msgs.msg.Pose()
                     goal_block_count = goal_states[goal_i]['r'] + goal_states[goal_i]['g']
-                    pose_goal.position.x = goal_states[goal_i]['x'] - 0.03 + (goal_block_count % 2)*0.03
-                    pose_goal.position.y = goal_states[goal_i]['y'] - 0.03 + (goal_block_count / 2)*0.03
+                    pose_goal.position.x = goal_states[goal_i]['x'] 
+                    pose_goal.position.y = goal_states[goal_i]['y'] - 0.05 + (goal_block_count )*0.025
                     pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05 #hardcode possibly
                     move_block(marker.pose, pose_goal)
 
