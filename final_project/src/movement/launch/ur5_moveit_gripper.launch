@@ -10,12 +10,12 @@
   <!-- Launch moveit_planning_execution.launch from ur5_moveit_config package -->
   <include file="$(find ur5_moveit_config)/launch/moveit_planning_execution.launch"/>
 
-  <!-- Run Robotiq2FGripperRtuNode.py for the Robotiq 2F gripper -->
-  <node name="robotiq_gripper" pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" output="screen">
-    <param name="port" value="/dev/ttyUSB0"/>
-  </node>
-
   <!-- Launch moveit_rviz.launch from ur5_moveit_config package -->
   <include file="$(find ur5_moveit_config)/launch/moveit_rviz.launch"/>
+
+  <!-- Run Robotiq2FGripperRtuNode.py for the Robotiq 2F gripper -->
+  <node name="robotiq_2f_gripper_control" pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode_withPort.py" output="screen">
+    <param name="port" value="/dev/ttyUSB0"/>
+  </node>
 
 </launch>

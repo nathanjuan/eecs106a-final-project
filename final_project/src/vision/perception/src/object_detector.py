@@ -57,6 +57,7 @@ class ObjectDetector:
         self.cy = msg.K[5]
 
     def pixel_to_point(self, u, v, depth):
+        depth = depth * 1.05
         # TODO: Use the camera intrinsics to convert pixel coordinates to real-world coordinates
         X = (u - self.cx) * depth / self.fx
         Y = (v - self.cy) * depth / self.fy
@@ -167,8 +168,8 @@ class ObjectDetector:
 
             # If there are no detected points, exit
             if len(x_coords) == 0 or len(y_coords) == 0:
-                print("No points detected")
-                return
+                print("No {} points detected".format(color))
+                continue
 
             centroids = self.get_centroids(x_coords / mask.shape[0], y_coords / mask.shape[1])
             centroids[:, 0] *= mask.shape[0]

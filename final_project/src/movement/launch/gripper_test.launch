@@ -1,0 +1,8 @@
+<launch>
+
+  <!-- Run Robotiq2FGripperRtuNode.py for the Robotiq 2F gripper -->
+  <node name="robotiq_2f_gripper_control" pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode_withPort.py" output="screen">
+    <param name="port" value="/dev/ttyUSB0"/>
+  </node>
+
+</launch>

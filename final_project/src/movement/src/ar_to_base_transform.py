@@ -28,7 +28,7 @@ if __name__ == '__main__':
     #     rate.sleep()
     while not rospy.is_shutdown():
         trans = geometry_msgs.msg.TransformStamped()
-        trans.transform.translation.x = 0.15875 # 6.25in in meters #artag in 3.25x3.25in
+        trans.transform.translation.x = 0.167 # 6.25in in meters #artag in 3.25x3.25in
         trans.transform.translation.y = 0.19685 # 7.75 in meters
         q = tf.transformations.quaternion_from_euler(0,0,math.pi/2)
         trans.transform.rotation.x = q[0]

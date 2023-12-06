@@ -169,15 +169,13 @@ class UR5_Manipulator(object):
         return all_close(joint_goal, current_joints, 0.01)
 
     def tuck(self):
-        joint_goal = self.move_group.get_current_joint_values()
-        joint_goal[0] = -pi/2
-        joint_goal[1] = -pi/3
-        joint_goal[2] = -2*pi/3
-        joint_goal[3] = 4.53 #260 degrees
-        joint_goal[4] = pi/2
-        joint_goal[5] = 0
+        tuck_pose = geometry_msgs.msg.Pose()
+        tuck_pose.position.x = 0.229
+        tuck_pose.position.y = 0.302
+        tuck_pose.position.z = 0.417
+        tuck_pose.orientation.x = 1.0
 
-        self.go_to_joint_state(joint_goal)
+        self.go_to_pose_goal(tuck_pose)
 
     def go_to_pose_goal(self, pose_goal):        
         """moves ur5 to target pose"""
@@ -434,7 +432,11 @@ class UR5_Manipulator(object):
         self.gripper_status = robotiq_inputMsg
     def activate_gripper(self):
         #if gripper.status.rACT == 1: give warining to activate
-        self.send_gripper_commad(rPR=0, rACT=1, rGTO=1)
+        self.send_gripper_commad(rPR=0, rACT=0, rGTO=0, rATR=0, rSP=0, rFR=0)
+        rospy.sleep(.2)
+        self.send_gripper_commad(rPR=0, rACT=1, rGTO=1, rATR=0, rSP=128, rFR=48)
+        rospy.sleep(2)
+
 
     def open_gripper(self):
         #if gripper.status.rACT == 0: give warining to activate
@@ -625,11 +627,37 @@ def executor():
 
     #repeat until all blocks in goal
 
+def test_gripper():
+    ur5 = UR5_Manipulator()
+    ur5.add_box()
+    ur5.activate_gripper()
+
+    input("Press `Enter` to open gripper")
+    ur5.open_gripper()
+    input("Press `Enter` to close gripper")
+    ur5.close_gripper()
+
+    input("Press `Enter` to move to ar tag")
+    ur5.close_gripper()
+    velocity_scaling_factor = 0.1  # Set your desired velocity scaling factor here
+    ur5.move_group.set_max_velocity_scaling_factor(velocity_scaling_factor)
+    pose_goal = geometry_msgs.msg.Pose()
+    pose_goal.orientation.x = 1.0
+    pose_goal.position.x = -0.19685
+    pose_goal.position.y =  0.167
+    pose_goal.position.z = 0.35
+    ur5.go_to_pose_goal(pose_goal)
+     
 def sort_blocks():
     try:
         ur5 = UR5_Manipulator()
+        velocity_scaling_factor = 0.3  # Set your desired velocity scaling factor here
+        ur5.move_group.set_max_velocity_scaling_factor(velocity_scaling_factor)
         ur5.add_box()
         ur5.activate_gripper()
+        # current_pose = ur5.move_group.get_current_pose().pose
+        # print(current_pose)
+        
 
         input("Press `Enter` to tuck")
         ur5.tuck()
@@ -641,23 +669,44 @@ def sort_blocks():
         
         
         #move to a block
+
         for marker in ur5.block_list.markers:
             pose_goal = geometry_msgs.msg.Pose()
             pose_goal.orientation.x = 1.0
             pose_goal.position.x = marker.pose.position.x
-            pose_goal.position.y = marker.pose.position.y
-            pose_goal.position.z = marker.pose.position.z + 0.3048 + .15
+            pose_goal.position.y = marker.pose.position.y + 0.005
+            pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
             ur5.go_to_pose_goal(pose_goal)
-            
-            pose_goal.position.z = marker.pose.position.z + 0.3048
+            input("Press `Enter` to continue")
+            pose_goal.position.z = marker.pose.position.z + 0.29 #0.3048
             ur5.go_to_pose_goal(pose_goal)
-            break
-        #pick up block
-        input("Press `Enter` to close gripper")
-        ur5.close_gripper()
-        #move to goal
+            rospy.sleep(5)
+            ur5.close_gripper()
+            rospy.sleep(5)
 
-        #check score
+            pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
+            ur5.go_to_pose_goal(pose_goal)
+            rospy.sleep(5)
+
+            if marker.color.r == 1:
+                pose_goal.position.x = marker.pose.position.x + 0.03
+            else:
+                 pose_goal.position.x = marker.pose.position.x - 0.03
+
+            ur5.go_to_pose_goal(pose_goal)
+            rospy.sleep(5)
+
+            pose_goal.position.z = marker.pose.position.z + 0.29 
+            ur5.go_to_pose_goal(pose_goal)
+            rospy.sleep(5)
+
+            ur5.open_gripper()
+            rospy.sleep(5)
+            
+
+            pose_goal.position.z = marker.pose.position.z + 0.29 + 0.05
+            ur5.go_to_pose_goal(pose_goal)
+
 
 
         #move to a block

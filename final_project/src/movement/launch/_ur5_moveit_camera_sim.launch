@@ -1,5 +1,6 @@
 <!-- ur5_moveit_camera_sim.launch -->
 <launch>
+
   <!-- Launch UR Gazebo simulation -->
   <include file="$(find ur_gazebo)/launch/ur5_bringup.launch"/>
 
@@ -30,6 +31,7 @@
   <node name="ar_to_base_transform" pkg="movement" type="ar_to_base_transform.py" output="screen"/>
 
   <!-- Run object_detector.py for perception -->
-  <node name="object_detector" pkg="perception" type="object_detector.py" output="screen"/>
+  <node name="object_detector" pkg="perception" type="object_detector.py" output="screen"/> 
+  
 
 </launch>
