@@ -115,7 +115,7 @@ class ObjectDetector:
             marker.color.a = 1.0  # Alpha must be non-zero
         elif color == 'r' or color == 'g':
             marker.type = Marker.CUBE
-            marker.pose.position.z = 0.060325 / 2 #
+            marker.pose.position.z = max(0.060325 / 2, point_base.point.z + 0.060325 / 2) #
             marker.pose.orientation.x = 0.0
             marker.pose.orientation.y = 0.0
             marker.pose.orientation.z = 0.0
@@ -162,7 +162,7 @@ class ObjectDetector:
         bounds = dict()
         bounds['r'] = (np.array([-10, 140, 140]), np.array([10, 255, 255]))
         bounds['g'] = (np.array([20, 90, 90]), np.array([50, 255, 255]))
-        bounds['b'] = (np.array([195, 90, 90]), np.array([225, 255, 255])) #need to test
+        bounds['b'] = (np.array([100, 90, 90]), np.array([140, 255, 255])) #need to test
         num_blocks = 0
         marker_array = MarkerArray()
 

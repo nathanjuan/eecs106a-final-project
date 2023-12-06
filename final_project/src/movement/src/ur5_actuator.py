@@ -418,7 +418,7 @@ class UR5_Manipulator(object):
             box_is_attached=False, box_is_known=False, timeout=timeout
         )
 
-    def send_gripper_commad(self, rPR, rACT=1, rGTO=1, rATR=0, rSP=128, rFR=64):
+    def send_gripper_commad(self, rPR, rACT=1, rGTO=1, rATR=0, rSP=128, rFR=32):
         gripper_command = robotiq_outputMsg.Robotiq2FGripper_robot_output()
         gripper_command.rACT = rACT # must remain at 1, will activate upon being switched to one
         gripper_command.rGTO = rGTO # 1 means it is following the go to routine
@@ -444,7 +444,7 @@ class UR5_Manipulator(object):
     
     def close_gripper(self):
         #if gripper.status.rACT == 0: give warining to activate
-        self.send_gripper_commad(rPR=255)
+        self.send_gripper_commad(rPR=255, rFR=32)
         #TODO wait till gripper stops
 
     def block_list_callback(self, msg):
@@ -646,7 +646,14 @@ def test_gripper():
     pose_goal.position.y =  0.167
     pose_goal.position.z = 0.35
     ur5.go_to_pose_goal(pose_goal)
-     
+
+def rgb_to_char(color):
+    if color.r == 1:
+        return 'r'
+    if color.b == 1:
+        return 'b'
+    if color.g == 1:
+        return 'g'
 def sort_blocks():
     try:
         ur5 = UR5_Manipulator()
@@ -671,12 +678,13 @@ def sort_blocks():
         block_counts = dict()
         goal_states = [] #[position x, position y, ]
         for marker in ur5.block_list.markers:
-            if marker.color == 'b':
+            color = rgb_to_char(marker.color)
+            if color == 'b':
                 goal_states.append({'x':marker.pose.position.x, 'y':marker.pose.position.y})
-            elif marker.color in block_counts.keys: 
-                block_counts[marker.color] += 1
+            elif color in block_counts.keys(): 
+                block_counts[color] += 1
             else:
-                block_counts[marker.color] = 1
+                block_counts[color] = 1
         
         #count blocks already on each goal
         
@@ -696,10 +704,10 @@ def sort_blocks():
                 ur5.go_to_pose_goal(pose_goal)
                 rospy.sleep(3)
                 ur5.close_gripper()
-                rospy.spleep(3)
+                rospy.sleep(3)
                 pose_goal.position.z = marker.pose.position.z + 0.29  + 0.05
                 ur5.go_to_pose_goal(pose_goal)
-                rospy.spleep(3)
+                rospy.sleep(3)
 
                 input("Press `Enter` to move to goal")
                 pose_goal.orientation.x = 1.0
