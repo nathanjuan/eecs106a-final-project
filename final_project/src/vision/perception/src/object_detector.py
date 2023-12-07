@@ -57,11 +57,11 @@ class ObjectDetector:
         self.cy = msg.K[5]
 
     def pixel_to_point(self, u, v, depth):
-        depth = depth * 1.05
+        depth = depth + 0.03
         # TODO: Use the camera intrinsics to convert pixel coordinates to real-world coordinates
         X = (u - self.cx) * depth / self.fx
         Y = (v - self.cy) * depth / self.fy
-        Z = depth
+        Z = depth 
         return X, Y, Z
 
     def color_image_callback(self, msg):
@@ -160,9 +160,9 @@ class ObjectDetector:
         # upper_hsv = np.array([10, 255, 255])#self.rgb_to_hsv(upper_rgb)
         #Green - 
         bounds = dict()
-        bounds['r'] = (np.array([-10, 140, 140]), np.array([10, 255, 255]))
-        bounds['g'] = (np.array([20, 90, 90]), np.array([50, 255, 255]))
-        bounds['b'] = (np.array([100, 90, 90]), np.array([140, 255, 255])) #need to test
+        bounds['r'] = (np.array([-10, 120, 120]), np.array([10, 200, 200]))
+        bounds['g'] = (np.array([20, 120, 120]), np.array([50, 200, 200]))
+        bounds['b'] = (np.array([100, 140, 140]), np.array([140, 255, 255])) #need to test
         num_blocks = 0
         marker_array = MarkerArray()
 

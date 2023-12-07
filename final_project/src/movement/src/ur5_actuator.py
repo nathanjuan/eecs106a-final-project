@@ -16,6 +16,7 @@ import rospy
 import moveit_commander
 import moveit_msgs.msg
 import geometry_msgs.msg
+from sensor_msgs.msg import JointState
 
 
 try:
@@ -94,6 +95,7 @@ class UR5_Manipulator(object):
         ## arm is set to "manipulator".
         group_name = "manipulator"
         move_group = moveit_commander.MoveGroupCommander(group_name)
+        # group_interface = moveit_commander.MoveGroupInterface(group_name, robot)
 
         ## Create a `DisplayTrajectory`_ ROS publisher which is used to display
         ## trajectories in Rviz:
@@ -127,6 +129,7 @@ class UR5_Manipulator(object):
         self.robot = robot
         self.scene = scene
         self.move_group = move_group
+        # self.group_interface = group_interface
         self.display_trajectory_publisher = display_trajectory_publisher
         self.planning_frame = planning_frame
         self.eef_link = eef_link
@@ -141,7 +144,7 @@ class UR5_Manipulator(object):
             "Robotiq2FGripperRobotInput", robotiq_inputMsg.Robotiq2FGripper_robot_input, self.gripper_status_callback)
         ### Camera subscriber init ###
         self.block_list_sub = rospy.Subscriber('/marker_array_topic', MarkerArray, self.block_list_callback)
-
+        self.joint_states_sub = rospy.Subscriber('/joint_states', JointState, self.joint_state_callback)
     def go_to_joint_state(self, joint_goal):
 
         ## BEGIN_SUB_TUTORIAL plan_to_joint_state
@@ -178,6 +181,11 @@ class UR5_Manipulator(object):
         tuck_pose.orientation.x = 1.0
 
         self.go_to_pose_goal(tuck_pose)
+    def wait_till_not_moving(self):
+        while not rospy.is_shutdown():
+            if all_close(self.joint_states, [0.0,0.0,0.0,0.0,0.0,0.0], 0.01):
+                return
+            rospy.sleep(0.08)
 
     def go_to_pose_goal(self, pose_goal):        
         """moves ur5 to target pose"""
@@ -429,7 +437,8 @@ class UR5_Manipulator(object):
         gripper_command.rSP = rSP # 1/2 max speed
         gripper_command.rFR = rFR # 1/4 max force
         self.robotiq_gripper_pub.publish(gripper_command)
-
+    def joint_state_callback(self, msg):
+        self.joint_states = msg
     def gripper_status_callback(self, robotiq_inputMsg):
         self.gripper_status = robotiq_inputMsg
     def activate_gripper(self):
@@ -493,7 +502,7 @@ class UR5_Manipulator(object):
         self.original_marker_states = copy.deepcopy(self.marker_states)
 
     def update_marker_state(self, i):
-        print(self.marker_states)
+        # print(self.marker_states)
         c = self.marker_states[i][1]
         old_positions = []
         indices = []
@@ -512,10 +521,11 @@ class UR5_Manipulator(object):
                 dist = ((old_positions[i][0] - new_positions[j][0])**2 + (old_positions[i][1] - new_positions[j][1])**2)**0.5
                 if dist < min_distance:
                     min_i, min_j = i, j
+                    min_distance = dist
         
         self.marker_states[indices[min_i]] = (new_positions[min_j], c)
         self.marker_states[indices[1-min_i]] = (new_positions[1-min_j], c)
-        print(self.marker_states)
+        # print(self.marker_states)
                 
             
 
@@ -651,7 +661,7 @@ def rgb_to_char(color):
 def sort_blocks():
     try:
         ur5 = UR5_Manipulator()
-        velocity_scaling_factor = 0.3  # Set your desired velocity scaling factor here
+        velocity_scaling_factor = 0.8  # Set your desired velocity scaling factor here
         ur5.move_group.set_max_velocity_scaling_factor(velocity_scaling_factor)
         ur5.add_box()
         ur5.activate_gripper()
@@ -682,7 +692,7 @@ def sort_blocks():
             pose_block.position.y = position_a[1] 
             pose_block.position.z =  block_center_height
             
-            id_num = int(goal_id)
+            id_num = int(block_id)
             offset = [[0, -0.05],[0.05, 0],[0, 0.05],[-0.05, 0]]
             position_g = ur5.goal_states[goal_id]
             pose_goal = geometry_msgs.msg.Pose()
@@ -701,7 +711,7 @@ def sort_blocks():
             pose_block.position.y = position_a[1] 
             pose_block.position.z =  block_center_height
             
-            position_b = ur5.original_marker_states[block_id]
+            position_b, c = ur5.original_marker_states[block_id]
             pose_goal = geometry_msgs.msg.Pose()
             pose_goal.orientation.x = 1.0
             pose_goal.position.x = position_b[0] 
@@ -713,40 +723,47 @@ def sort_blocks():
         def move_block(pose_a, pose_b): #location of block centroid, goal block centroid
             pose_goal = geometry_msgs.msg.Pose()
                         
-            input("Press `Enter` to go above block")
+            input("Press `Enter` move block")
             pose_goal.orientation.x = 1.0
             pose_goal.position.x = pose_a.position.x
             pose_goal.position.y = pose_a.position.y + 0.005 #tuning offset of 0.005
             pose_goal.position.z = pose_a.position.z + 0.29 + 0.05
             ur5.go_to_pose_goal(pose_goal)
+            ur5.wait_till_not_moving()
+            # rospy.sleep(2)
 
-            input("Press `Enter` to pickup block")
             pose_goal.position.z = pose_a.position.z + 0.29 
             ur5.go_to_pose_goal(pose_goal)
-            rospy.sleep(2)
+            ur5.wait_till_not_moving()
+            # rospy.sleep(1)
             ur5.close_gripper()
             rospy.sleep(1.1)
             pose_goal.position.z = pose_a.position.z + 0.29  + 0.07
             ur5.go_to_pose_goal(pose_goal)
+            ur5.wait_till_not_moving()
+            # rospy.sleep(1)
 
-            input("Press `Enter` to move to goal")
             pose_goal.orientation.x = 1.0
             pose_goal.position.x = pose_b.position.x
             pose_goal.position.y = pose_b.position.y #+ 0.005
             pose_goal.position.z = pose_b.position.z + 0.29 + 0.07
             ur5.go_to_pose_goal(pose_goal)
-            rospy.sleep(3)
+            ur5.wait_till_not_moving()
+            # rospy.sleep(2)
             pose_goal.position.z = pose_b.position.z + 0.29 + 0.005
             ur5.go_to_pose_goal(pose_goal)
-            rospy.sleep(1.5)
-            ur5.open_gripper(128) # TODO tune
+            ur5.wait_till_not_moving()
+            # rospy.sleep(1)
+            ur5.open_gripper(145) # TODO tune
             rospy.sleep(1.5)
             pose_goal.position.z = pose_b.position.z + 0.29 + 0.05
             ur5.go_to_pose_goal(pose_goal)
-            rospy.sleep(0.5)
+            ur5.wait_till_not_moving()
+            # rospy.sleep(1)
             ur5.open_gripper()
             ur5.tuck()
-            rospy.sleep(3)
+            ur5.wait_till_not_moving()
+            rospy.sleep(1)
 
         
         for color in ['r', 'g']:
@@ -758,7 +775,10 @@ def sort_blocks():
                 for block_id in ur5.marker_states.keys():
                     if ur5.marker_states[block_id][1] == color:
                         move_block_to_goal(block_id, goal_id)
-                        score = int(input("Reward for most recent maneuver: "))
+                        x = input("Reward for most recent maneuver: ")
+                        if x == '':
+                            x = '0'
+                        score = int(x)
                         ur5.rewards[color][goal_id] = score
 
                         if goal_idx >= ur5.num_goals:
