@@ -1,0 +1,21 @@
+<launch>
+  <!-- Set the robot IP address as an argument -->
+  <arg name="robot_ip" default="172.22.22.2"/>
+
+  <!-- Launch the ur_robot_driver with the specified robot IP -->
+  <include file="$(find ur_robot_driver)/launch/ur5_bringup.launch">
+    <arg name="robot_ip" value="$(arg robot_ip)"/>
+  </include>
+
+  <!-- Launch moveit_planning_execution.launch from ur5_moveit_config package -->
+  <include file="$(find ur5_moveit_config)/launch/moveit_planning_execution.launch"/>
+
+  <!-- Launch moveit_rviz.launch from ur5_moveit_config package -->
+  <include file="$(find ur5_moveit_config)/launch/moveit_rviz.launch"/>
+
+  <!-- Run Robotiq2FGripperRtuNode.py for the Robotiq 2F gripper -->
+  <node name="robotiq_2f_gripper_control" pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode_withPort.py" output="screen">
+    <param name="port" value="/dev/ttyUSB0"/>
+  </node>
+
+</launch>

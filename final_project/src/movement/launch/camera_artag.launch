@@ -1,0 +1,19 @@
+<!-- ur5_moveit_camera_sim.launch -->
+<launch>
+  <!-- Launch RealSense camera -->
+  <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+    <arg name="align_depth" value="true"/>
+    <arg name="depth_fps" value="6"/>
+    <arg name="color_fps" value="6"/>
+  </include>
+
+  <!-- Launch AR tag detection -->
+  <include file="$(find lab4_cam)/launch/ar_track.launch"/>
+
+  <!-- Run ar_to_base_transform.py for AR tag to base transform -->
+  <node name="ar_to_base_transform" pkg="movement" type="ar_to_base_transform.py" output="screen"/>
+
+  <!-- Run object_detector.py for perception -->
+  <node name="object_detector" pkg="perception" type="object_detector.py" output="screen"/>
+
+</launch>

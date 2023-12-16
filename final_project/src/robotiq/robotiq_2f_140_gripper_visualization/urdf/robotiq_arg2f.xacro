@@ -17,10 +17,10 @@
         </material>
       </visual>
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <geometry>
-          <mesh filename="package://robotiq_2f_140_gripper_visualization/meshes/collision/robotiq_arg2f_base_link.stl" />
-        </geometry>
+            <origin xyz="0 0 0.088" rpy="0 0 0" />
+            <geometry>
+            <cylinder length="0.3048" radius="0.1"/>
+            </geometry>
       </collision>
     </link>
   </xacro:macro>
